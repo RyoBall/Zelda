@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Zelda/Zelda.vcxproj" Id="d8071239-7b54-47a2-b030-b2597e0d562f" />
+</Solution>
