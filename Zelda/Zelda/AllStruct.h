@@ -17,7 +17,7 @@ struct ListNode
 	ListNode<T>* next;
 	T& data;
 	ListNode<T>(T data) { this->data = data; }
-	ListNode<T>() { }
+	ListNode<T>() {}
 };
 template<typename T>
 class Stack
@@ -31,7 +31,7 @@ public:
 	{
 		length++;
 		ListNode<T>* node = new ListNode<T>(data);
-		if(head==nullptr)
+		if (head == nullptr)
 		{
 			head = node;
 		}
@@ -66,9 +66,9 @@ template<typename T>
 class List
 {
 public:
-	void Insert(int pos,T data)
+	void Insert(int pos, T data)
 	{
-		if(pos>length+1||pos<1)
+		if (pos > length + 1 || pos < 1)
 		{
 			return;
 		}
@@ -76,14 +76,14 @@ public:
 		{
 			length++;
 			ListNode<T>* node = new ListNode<T>(data);
-			if(pos==1)
+			if (pos == 1)
 			{
 				node->next = head;
 				head = node;
 				return;
 			}
 			ListNode<T>* tmp = head;;
-			for(int i=1;i<pos-1;i++)
+			for (int i = 1; i < pos - 1; i++)
 			{
 				tmp = tmp->next;
 			}
@@ -101,12 +101,12 @@ public:
 		{
 			length--;
 			ListNode<T>* tmp = head;;
-			for (int i = 1;i < pos - 1;i++)
+			for (int i = 1; i < pos - 1; i++)
 			{
 				tmp = tmp->next;
 			}
-			if(tmp->next!=nullptr)
-			tmp -> next = tmp->next->next;
+			if (tmp->next != nullptr)
+				tmp->next = tmp->next->next;
 			else
 			{
 				tmp->next = nullptr;
@@ -117,15 +117,15 @@ protected:
 	int length;
 	ListNode<T>* head;
 };
-class Bag:public List<BagUnit>
+class Bag :public List<BagUnit>
 {
 public:
 	void AddUnit(int ID)
 	{
 		ListNode<BagUnit>* tmp = head;
-		while (tmp!=nullptr)
+		while (tmp != nullptr)
 		{
-			if(tmp->data.ID==ID)
+			if (tmp->data.ID == ID)
 			{
 				tmp->data.num++;
 			}
@@ -135,3 +135,17 @@ public:
 	}
 private:
 };
+void SortIngredientIDs(std::vector<int>ids)
+{
+	for (int i = 1; i < ids.size(); ++i)
+	{
+		int key = ids[i];
+		int j = i - 1;
+		while (j >= 0 && ids[j] > key)
+		{
+			ids[j + 1] = ids[j];
+			--j;
+		}
+		ids[j + 1] = key;
+	}
+}
