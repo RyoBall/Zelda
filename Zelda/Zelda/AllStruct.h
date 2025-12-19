@@ -325,3 +325,17 @@ private:
 	int size=30;
 	List<List<Recipe>>* disks;
 };//简单实现一个类哈希表，哈希函数不太实用，甚至由于ID数量可能不太够导致只是一个数组而已
+void SortIngredientIDs(std::vector<int>ids)
+{
+	for (int i = 1; i < ids.size(); ++i)
+	{
+		int key = ids[i];
+		int j = i - 1;
+		while (j >= 0 && ids[j] > key)
+		{
+			ids[j + 1] = ids[j];
+			--j;
+		}
+		ids[j + 1] = key;
+	}
+}
