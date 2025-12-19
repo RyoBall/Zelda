@@ -1,0 +1,41 @@
+﻿  Ingredient.cpp
+D:\zelda\Zelda\Zelda\Ingredient.cpp(56,9): warning C4244: “return”: 从“float”转换到“int”，可能丢失数据
+D:\zelda\Zelda\Zelda\AllStruct.h(256,24): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
+  (编译源文件“Ingredient.cpp”)
+      D:\zelda\Zelda\Zelda\AllStruct.h(256,24):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\zelda\Zelda\Zelda\Ingredient.cpp(5,34):
+          查看对正在编译的 类 模板 实例化“BaseHashList<std::string,Ingredient>”的引用
+          D:\zelda\Zelda\Zelda\AllStruct.h(254,6):
+          在编译 类 模板 成员函数“int BaseHashList<std::string,Ingredient>::HashFunc(K)”时
+          with
+          [
+              K=std::string
+          ]
+              D:\zelda\Zelda\Zelda\AllStruct.h(244,10):
+              请参阅 "BaseHashList<std::string,Ingredient>::operator []" 中对 "BaseHashList<std::string,Ingredient>::HashFunc" 的第一个引用
+              D:\zelda\Zelda\Zelda\Ingredient.cpp(98,23):
+              请参阅 "InitAllRecipes" 中对 "BaseHashList<std::string,Ingredient>::operator []" 的第一个引用
+  
+  main.cpp
+D:\zelda\Zelda\Zelda\main.cpp(56,42): warning C4390: “;”: 找到空的受控语句；这是否是有意的?
+D:\zelda\Zelda\Zelda\AllStruct.h(256,24): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
+  (编译源文件“main.cpp”)
+      D:\zelda\Zelda\Zelda\AllStruct.h(256,24):
+      模板实例化上下文(最早的实例化上下文)为
+          D:\zelda\Zelda\Zelda\Ingredient.h(107,29):
+          查看对正在编译的 类 模板 实例化“BaseHashList<int,List<Recipe>>”的引用
+          D:\zelda\Zelda\Zelda\AllStruct.h(254,6):
+          在编译 类 模板 成员函数“int BaseHashList<int,List<Recipe>>::HashFunc(K)”时
+          with
+          [
+              K=int
+          ]
+              D:\zelda\Zelda\Zelda\AllStruct.h(244,10):
+              请参阅 "BaseHashList<int,List<Recipe>>::operator []" 中对 "BaseHashList<int,List<Recipe>>::HashFunc" 的第一个引用
+              D:\zelda\Zelda\Zelda\main.cpp(52,30):
+              请参阅 "Cook" 中对 "BaseHashList<int,List<Recipe>>::operator []" 的第一个引用
+  
+  正在生成代码...
+D:\zelda\Zelda\Zelda\Ingredient.h(82,1): warning C4717: “Recipe::Rule”: 如递归所有控件路径，函数将导致运行时堆栈溢出
+  Zelda.vcxproj -> D:\zelda\Zelda\x64\Debug\Zelda.exe

@@ -5,17 +5,6 @@
 using namespace std;
 class Player;
 
-struct Food //背包单元,单个种类的物品
-{
-	string name;
-	int ID;
-	int num=0;
-	float heal;
-	float duration;
-	function<void(Player&)> effect;
-	Food(string name = "", int ID = 0, float heal = 0, float duraton = 0, function<void(Player&)> effect = [](Player& player) {;}) :name(name), ID(ID), heal(heal), duration(duration), effect(effect)
-	{}
-};
 
 template<typename T>
 struct ListNode //节点
@@ -29,13 +18,6 @@ struct ListNode //节点
 	ListNode<T>() { 
 		next = nullptr;
 	}
-};
-
-template<typename K,typename V>
-struct HashData
-{
-	K key;
-	V value;
 };
 
 template<typename T>
@@ -88,6 +70,22 @@ public:
 			delete tmp;
 		}
 	}
+	void Pop()
+	{
+		if (head == nullptr)
+			return;
+		else
+		{
+			length--;
+			ListNode<T>* tmp = head;
+			head = head->next;
+			delete tmp;
+		}
+	}
+	ListNode<T>* GetHead()
+	{
+		return head;
+	}
 	Stack()
 	{
 		head = nullptr;
@@ -114,7 +112,20 @@ public:
 			tmp = tmp->next;
 		return tmp->data;
 	}
-	int size()
+	const T& operator[](int index)const
+	{
+		if (index > length - 1||index<0)
+		{
+			throw std::out_of_range("Index out of bounds");
+		}
+		ListNode<T>* tmp = head;
+		if (index == length - 1)
+			return last->data;
+		for (int i = 0;i < index;i++)
+			tmp = tmp->next;
+		return tmp->data;
+	}
+	int size()const
 	{
 		return length;
 	}
@@ -193,6 +204,13 @@ public:
 		}
 	}
 	List<T>() { length = 0 ;head = last = nullptr; }
+	List<T>(std::initializer_list<T> datas)
+	{
+		length = 0;head = last = nullptr;
+		for (const auto& item : datas) {
+			push_back(item);
+		}
+	}
 	ListNode<T>* GetHead()
 	{
 		return head;
@@ -203,139 +221,63 @@ protected:
 	ListNode<T>* head;
 	ListNode<T>* last;
 };
-class Bag:public List<Food>
-{
-public:
-	void Display()
-	{
-		cout << "====== BAG ======" << endl;
-		for(int i=0;i<length;i++)
-		{
-			cout << (*this)[i].name<<"×"<<(*this)[i].num << endl;
-		}
-	}
-	void AddUnit(Food unit)
-	{
-		ListNode<Food>* tmp = head;
-		while (tmp!=nullptr)
-		{
-			if(tmp->data.ID==unit.ID)
-			{
-				tmp->data.num++;
-			}
-		}
-		if (tmp == nullptr)
-		{
-			push_back(unit);
-			Food t;
-			(*this)[length - 1].num++;
-		}
-	}
-	void RemoveUnit(int index)//index从1开始数
-	{
-		(*this)[index - 1].num--;
-		if ((*this)[index - 1].num == 0)
-		{
-			(*this).Delete(index);
-		}
-	}
-private:
-};
-
-extern List<Food> unitList;
-extern Bag bag;
-void InitAllUnits();
-
-enum class FoodType {};
-class Recipe//菜谱
-{
-public:
-	bool rule(){}
-	Recipe()
-	{
-		minID = FindMinID(specialFoodNeeds.GetHead());
-	}
-	int GetMinID()
-	{
-		return minID;
-	}
-private:
-	int FindMinID(ListNode<Food>* f)
-	{
-		if(f->next==nullptr)
-		{
-			return f->data.ID;
-		}
-		else
-		{
-			int minID = FindMinID(f->next);
-			if (f->data.ID < minID)
-				return f->data.ID;
-			else
-				return minID;
-		}
-	}
-	int minID;
-	List<Food> specialFoodNeeds;
-	function<bool(List<Food>)> checRule;
-	string name;
-};
 //目前思路，需要一个map，然后把菜肴的数组放进map里
-
-class HashList
+template<typename K,typename T>
+class BaseHashList
 {
 public:
-	HashList()
+	BaseHashList()
 	{
-		disks = new List<List<Recipe>>[size];
+		Node = new List<HashData>[size];
 	}
-	void Insert(Recipe disk)
+
+	void Insert(K key, T data)
 	{
-		int order=disk.GetMinID() % size;
-		if(disks[order].GetLength()==0)
+		int id = HashFunc(key);
+		int order=id % size;
+		if(Node[order].GetLength()==0)
 		{
-			disks[order].push_back(List<Recipe>());
-			disks[order][0].push_back(disk);
+			Node[order].push_back(HashData(id,data));
 		}
 		else
 		{
-			for(int i=0;i<disks[order].GetLength();i++)
+			for(int i=0;i<Node[order].GetLength();i++)
 			{
-				if(disks[order][i][0].GetMinID() == disk.GetMinID())
+				if(Node[order][i].key == id)
 				{
-					disks[order][i].push_back(disk);
+					Node[order][i].data = data;
 					return;
 				}
 			}
-			disks[order].push_back(List<Recipe>());
-			disks[order][disks[order].GetLength() - 1].push_back(disk);
+			Node[order].push_back(HashData(id,data));
 		}
 	}
-	const List<Recipe>* FindDisks(int ID)
+	T* operator[](K key)
 	{
-		int order = ID % size;
-		for(int i=0;i<disks[order].GetLength();i++)
+		int id = HashFunc(key);
+		int order = id% size;
+		for (int i = 0;i < Node[order].GetLength();i++)
 		{
-			if (disks[order][i][0].GetMinID() == ID)
-				return &(disks[order][i]);
+			if (Node[order][i].key == id)
+				return &(Node[order][i].data);
 		}
 		return nullptr;
 	}
-private:
-	int size=30;
-	List<List<Recipe>>* disks;
-};//简单实现一个类哈希表，哈希函数不太实用，甚至由于ID数量可能不太够导致只是一个数组而已
-void SortIngredientIDs(std::vector<int>ids)
-{
-	for (int i = 1; i < ids.size(); ++i)
+protected:
+	int HashFunc(K key)
 	{
-		int key = ids[i];
-		int j = i - 1;
-		while (j >= 0 && ids[j] > key)
-		{
-			ids[j + 1] = ids[j];
-			--j;
-		}
-		ids[j + 1] = key;
+		return std::hash<K>{}(key);
 	}
-}
+	struct HashData
+	{
+		T data;
+		int key;
+		HashData(int key, T data,bool ifK=false) :data(data), key(key) {}
+		HashData(K key, T data) :data(data), key(HashFunc(key)) {}
+	};
+	int size=30;
+	List<HashData>* Node;
+	//尝试实现迭代器
+	
+};
+//简单实现一个类哈希表，哈希函数不太实用，甚至由于ID数量可能不太够导致只是一个数组而已
