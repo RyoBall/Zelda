@@ -125,10 +125,6 @@ public:
 			tmp = tmp->next;
 		return tmp->data;
 	}
-	int size()const
-	{
-		return length;
-	}
 	void Insert(int pos,T data)
 	{
 		if (pos > length + 1 || pos < 1)
@@ -215,7 +211,7 @@ public:
 	{
 		return head;
 	}
-	int GetLength() { return length; }
+	int size()const {return length;}
 protected:
 	int length;
 	ListNode<T>* head;
@@ -226,37 +222,43 @@ template<typename K,typename T>
 class BaseHashList
 {
 public:
+	struct HashData
+	{
+		T data;
+		int key;
+		HashData() : data(T()), key(0) {}
+		HashData(int key, T data,bool in) :data(data), key(key) {}
+		HashData(K key, T data) :data(data), key(BaseHashList<K, T>::HashFunc(key)) {}
+	};
+	BaseHashList(std::initializer_list<std::pair<K, T>> datas)
+	{
+		Node = new List<HashData>[mapSize];
+		for (auto& item : datas)
+		{
+			InsertByKey(item.first, item.second);
+		}
+	}
 	BaseHashList()
 	{
-		Node = new List<HashData>[size];
+		Node = new List<HashData>[mapSize];
 	}
-
-	void Insert(K key, T data)
+	void InsertByKey(K key, T data)
 	{
 		int id = HashFunc(key);
-		int order=id % size;
-		if(Node[order].GetLength()==0)
-		{
-			Node[order].push_back(HashData(id,data));
-		}
-		else
-		{
-			for(int i=0;i<Node[order].GetLength();i++)
-			{
-				if(Node[order][i].key == id)
-				{
-					Node[order][i].data = data;
-					return;
-				}
-			}
-			Node[order].push_back(HashData(id,data));
-		}
+		if (id < 0)
+			id = -id;
+		Insert(id, data);
+	}
+	void InsertByKey(K key, T data,bool is)
+	{
+		int id = HashFunc(key);
+		Insert(id, data);
 	}
 	T* operator[](K key)
 	{
 		int id = HashFunc(key);
-		int order = id% size;
-		for (int i = 0;i < Node[order].GetLength();i++)
+		int order = id% 30;
+		for (int i = 0;i < Node[order].size();i++)
 		{
 			if (Node[order][i].key == id)
 				return &(Node[order][i].data);
@@ -264,20 +266,48 @@ public:
 		return nullptr;
 	}
 protected:
-	int HashFunc(K key)
+	bool Insert(int id,T data)
 	{
-		return std::hash<K>{}(key);
+		int order = id % mapSize;
+		if (Node[order].size() == 0)
+		{
+			Node[order].push_back(HashData(id, data,false));
+		}
+		else
+		{
+			for (int i = 0;i < Node[order].size();i++)
+			{
+				if (Node[order][i].key == id)
+				{
+					Node[order][i].data = data;
+					return false;
+				}
+			}
+			Node[order].push_back(HashData(id, data,false));
+		}
+		return true;
 	}
-	struct HashData
+	static int HashFunc(K key)
 	{
-		T data;
-		int key;
-		HashData(int key, T data,bool ifK=false) :data(data), key(key) {}
-		HashData(K key, T data) :data(data), key(HashFunc(key)) {}
-	};
-	int size=30;
+		int id=std::hash<K>{}(key);
+		if (id < 0)
+			id = -id;
+		return id;
+	}
+	const int mapSize=30;
 	List<HashData>* Node;
-	//尝试实现迭代器
-	
 };
 //简单实现一个类哈希表，哈希函数不太实用，甚至由于ID数量可能不太够导致只是一个数组而已
+
+template<typename T>
+List<T> StackToList(Stack<T> stack) {
+	List<T> list;
+	T food;
+	int size = stack.size();
+	for (int i = 0;i < size;i++)
+	{
+		stack.Pop(food);
+		list.push_back(food);
+	}
+	return list;
+}

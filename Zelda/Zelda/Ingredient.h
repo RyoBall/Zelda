@@ -4,8 +4,9 @@
 #include<unordered_map>
 #include "AllStruct.h"
 class Ingredient;
+extern BaseHashList<int, Ingredient> ingredientMapID;
 extern List<Ingredient> unitList;
-enum class IngredientType { Fruit, Meat, Mushroom, Vegetable, Nut, Fish, Monster,Insect };
+enum class IngredientType { Fruit, Meat, Mushroom, Vegetable, Nut, Fish, Monster,Insect,Other };
 enum class EffectType {
 	None,
 	Attack,
@@ -55,18 +56,7 @@ public:
 };
 
 int FindMinID(ListNode<Ingredient>* f);
-
-template<typename T>
-List<T> StackToList(Stack<T> stack){
-	List<T> list;
-	T food;
-	for (int i = 0;i < list.size();i++)
-	{
-		stack.Pop(food);
-		list.push_back(food);
-	}
-	return list;
-}
+int FindMinID(ListNode<int>* f);
 
 
 struct RecipeTypeNeed{
@@ -77,16 +67,17 @@ struct RecipeTypeNeed{
 class Recipe//菜谱
 {
 public:
-	bool Rule(const List<Ingredient>& foods,const List<IngredientType>& foodTypes)
+	bool Rule(const List<Ingredient>& foods)
 	{
 		int* ptr;
+		foods.size();
 		for(int i=0;i<foods.size();i++)
 		{
 			bool r=false;
 			ptr=specialIngredientNeeds[foods[i].GetID()];
 			if (ptr != nullptr)
 			{
-				*ptr++;
+				(*ptr)++; 
 				r = true;
 			}
 			if (r)
@@ -96,7 +87,7 @@ public:
 				ptr = specialIngredientNeedsAlternative[j][foods[i].GetID()];
 				if (ptr != nullptr)
 				{
-					*ptr++;
+					(*ptr)++; 
 					r = true;
 					break;
 				}
@@ -106,75 +97,45 @@ public:
 			ptr=typeNeeds[foods[i].GetType()];
 			if (ptr != nullptr)
 			{
-				*ptr++;
+				(*ptr)++; 
 				r = true;
 			}
 			if (!r)
 				return false;
 		}
 		//待做项：检测哈希表中的数据是否全部都+1.
-	 	/*if (specialIngredientNeedsAlternative.size()>0)
+		//1 特定项
+		for(int i=0;i<allSpecialIngredients.size();i++)
 		{
-			for(int i=0;i<specialIngredientNeedsAlternative.size();i++)
+			if(*(specialIngredientNeeds[allSpecialIngredients[i]])<=0)
 			{
-				bool rc = false;
-				for(int j=0;j<specialIngredientNeedsAlternative[i].size();j++)
-				{
-					for(int i_=0;i_<foods.size();i_++)
-					{
-						if(foods[i_].GetID()==specialIngredientNeedsAlternative[i][j].GetID())
-						{
-							rc = true;
-							break;
-						}
-					}
-					if (rc)
-						break;
-				}
-				if (!rc)
-					return false;
+				return false;
+			}
+			else
+			{
+				*(specialIngredientNeeds[allSpecialIngredients[i]]) = 0;
 			}
 		}
-		//第一步，对比可选的项目
-		if(specialIngredientNeeds.size()>0)
+		//2 可选特定项
+		for (int i = 0;i < specialIngredientNeedsAlternative.size();i++)
 		{
-			for(int i=0;i<specialIngredientNeeds.size();i++)
+			bool r = false;
+			for(int j=0;j<allAlterNativeSpecialIngredients[i].size();j++)
 			{
-				bool rc = false;
-				for(int j=0;j<specialIngredientNeeds.size();j++)
-				{
-					if(specialIngredientNeeds[i].GetID()==foods[j].GetID())
-					{
-						rc = true;
-						break;
-					}
-				}
-				if (!rc)
-					return false;
+				if (*(specialIngredientNeedsAlternative[i][allAlterNativeSpecialIngredients[i][j]]) > 0)
+					r = true;
+				*(specialIngredientNeedsAlternative[i][allAlterNativeSpecialIngredients[i][j]]) = 0;
 			}
+			if (!r)
+				return false;
 		}
-		//第二步,对比特定的项目
-		if(typeNeeds.size()>0)
+		//3 类别项
+		for(int i=0;i<allTypeNeeds.size();i++)
 		{
-			for(int i=0;i<typeNeeds.size();i++)
-			{
-				bool rc=false;
-				for(int j=0;j<foodTypes.size();j++)
-				{
-					if(typeNeeds[i].type==foodTypes[j])
-					{
-						rc = true;break;
-					}
-				}
-				if (!rc)
-					return false;
-			}
+			if (*(typeNeeds[allTypeNeeds[i]]) <= 0)
+				return false;
+			*(typeNeeds[allTypeNeeds[i]]) = 0;
 		}
-		//第三步,对比类型需求
-		for(int i=0;i<foods.size();i++)
-		{
-			for(int i1=0;i1<)
-		}*/
 		return true;
 	}
 	string GetName()
@@ -183,18 +144,77 @@ public:
 	}
 	Recipe()
 	{
-		minID = FindMinID(allSpecialIngredients.GetHead());
+		minID = 0;
 	}
-	Recipe(List<Ingredient> specialIngredientNeeds, List<List<Ingredient>> specialIngredientNeedsAlternative,List<RecipeTypeNeed> typeNeeds):specialIngredientNeedsAlternative(specialIngredientNeedsAlternative), specialIngredientNeeds(specialIngredientNeeds), typeNeeds(typeNeeds)
+	Recipe(string name,List<int> allSPneeds, List<List<int>> allASPneeds,List<IngredientType> allTypeNeeds, BaseHashList<int, int> specialIngredientNeeds, List<BaseHashList<int, int>> specialIngredientNeedsAlternative, BaseHashList<IngredientType, int>typeNeeds):specialIngredientNeedsAlternative(specialIngredientNeedsAlternative), specialIngredientNeeds(specialIngredientNeeds), typeNeeds(typeNeeds),allAlterNativeSpecialIngredients(allASPneeds),allSpecialIngredients(allSPneeds),allTypeNeeds(allTypeNeeds),name(name)
 	{
-		minID = FindMinID(allSpecialIngredients.GetHead());
+		aSI = List<int>();
+		InitMinID();
+		InitTypeSum();
 	}
-	int GetMinID()
+	int GetMinID() const
 	{
 		return minID;
 	}
-private:
+	int GetTypeNum() const
+	{
+		return typeNum;
+	}
+private: 
+	void InitMinID()
+	{
+		List<int> tmpList;
+		tmpList.push_back(FindMinID(allSpecialIngredients.GetHead()));
+		for (int i = 0;i < allSpecialIngredients.size();i++)
+			aSI.push_back(allSpecialIngredients[i]);
+		for (int i = 0;i < allAlterNativeSpecialIngredients.size();i++)
+		{
+			tmpList.push_back(FindMinID(allAlterNativeSpecialIngredients[i].GetHead()));
+			for (int j = 0;j < allAlterNativeSpecialIngredients[i].size();j++)
+				aSI.push_back(allAlterNativeSpecialIngredients[i][j]);
+		}
+		if (tmpList.size() != 0)
+		{
+			minID = FindMinID(tmpList.GetHead());
+			cout << name << minID << endl;
+		}
+		else
+		{
+			minID = 0;
+		}
+	}
+	void InitTypeSum()
+	{
+		List<int> types;
+		for(int i=0;i<allTypeNeeds.size();i++)
+		{
+			types.push_back(static_cast<int>(allTypeNeeds[i]));
+		}
+		for(int i=0;i<aSI.size();i++)
+		{
+			int chec = static_cast<int>(ingredientMapID[aSI[i]]->GetType());
+			bool same=false;
+			for(int j=0;j<types.size();j++)
+			{
+				if(chec==types[j])
+				{
+					same = true;
+					break;
+				}
+			}
+			if(!same)
+				types.push_back(chec);
+		}
+		int num=0;
+		for(int i=0;i<types.size();i++)
+		{
+			num += types[i] * 5 + 3;
+		}
+		typeNum = num;
+	}
 	int minID;
+	int typeNum;
+	List<int> aSI;//所有的特殊要求，包括可选
 	List<int> allSpecialIngredients;
 	List<List<int>> allAlterNativeSpecialIngredients;
 	List<IngredientType> allTypeNeeds;
@@ -207,47 +227,74 @@ private:
 class RecipeHashList:public BaseHashList<int,List<Recipe>>
 {
 public:
-	RecipeHashList()
+	RecipeHashList():BaseHashList()
 	{
 		
 	}
-	void Insert(Recipe disk)
+	virtual void Insert(const Recipe& disk)
 	{
-		int order = disk.GetMinID() % size;
-		if (Node[order].GetLength() == 0)
+		;
+	}
+private:
+};
+
+class RecipeHashListID:public RecipeHashList
+{
+public:
+	RecipeHashListID() :RecipeHashList()
+	{}
+	void Insert(const Recipe& disk) override
+	{
+		int id = HashFunc(disk.GetMinID());
+		int order = id%mapSize;
+		if (Node[order].size() == 0)
 		{
-			Node[order].push_back(HashData(disk.GetMinID(), List<Recipe>(),false));
+			Node[order].push_back(HashData(id, List<Recipe>(), false));
 			Node[order][0].data.push_back(disk);
 		}
 		else
 		{
-			for (int i = 0;i < Node[order].GetLength();i++)
+			for (int i = 0;i < Node[order].size();i++)
 			{
-				if (Node[order][i].data[0].GetMinID() == disk.GetMinID())
+				if (Node[order][i].key == id)
 				{
 					Node[order][i].data.push_back(disk);
 					return;
 				}
 			}
-			Node[order].push_back(HashData(disk.GetMinID(), List<Recipe>(),false));
+			Node[order].push_back(HashData(id, List<Recipe>(), false));
 			Node[order][Node[order].size() - 1].data.push_back(disk);
 		}
 	}
-	const List<Recipe>* FindDisks(int ID)
-	{
-		return nullptr;
-		int order = ID % size;
-		for (int i = 0;i < Node[order].GetLength();i++)
-		{
-			if (Node[order][i].data[0].GetMinID() == ID)
-				return &(Node[order][i].data);
-		}
-		return nullptr;
-	}
-private:
 };
-
-extern RecipeHashList recipes;
+class RecipeHashListType:public RecipeHashList
+{
+public:
+	void Insert(const Recipe& disk) override
+	{
+		int id = HashFunc(disk.GetTypeNum());
+		cout<<id;
+		int order = id%mapSize;
+		if (Node[order].size() == 0)
+		{
+			Node[order].push_back(HashData(id, List<Recipe>(), false));
+			Node[order][0].data.push_back(disk);
+		}
+		else
+		{
+			for (int i = 0;i < Node[order].size();i++)
+			{
+				if (Node[order][i].key == id)
+				{
+					Node[order][i].data.push_back(disk);
+					return;
+				}
+			}
+			Node[order].push_back(HashData(id, List<Recipe>(), false));
+			Node[order][Node[order].size() - 1].data.push_back(disk);
+		}
+	}
+};
 
 class Bag :public List<Ingredient>
 {
@@ -260,20 +307,22 @@ public:
 			cout << (*this)[i].GetName() << "×" << (*this)[i].num << endl;
 		}
 	}
-	void AddUnit(Ingredient unit)
+	void AddUnit(Ingredient unit,int nums)
 	{
 		ListNode<Ingredient>* tmp = head;
 		while (tmp != nullptr)
 		{
 			if (tmp->data.GetID() == unit.GetID())
 			{
-				tmp->data.num++;
+				tmp->data.num+=nums;
+				break;
 			}
+			tmp = tmp->next;
 		}
 		if (tmp == nullptr)
 		{
 			push_back(unit);
-			(*this)[length - 1].num++;
+			(*this)[length - 1].num=nums;
 		}
 	}
 	void RemoveUnit(int index)//index从1开始数
@@ -287,5 +336,8 @@ public:
 private:
 };
 extern Bag bag;
+extern RecipeHashListID IDRecipeMap;
+extern RecipeHashListType TypeRecipeMap;
 void InitAllUnits();
+void InitAllRecipes();
 extern BaseHashList<string, Ingredient> ingredientMap;
