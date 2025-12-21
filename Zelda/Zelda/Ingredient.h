@@ -17,10 +17,10 @@ enum class EffectType {
 	WarmDef,
 	ColdDef,
 	FireDef,
-	IceDef,
 	ParalysisDef
 };
 static BaseHashList<EffectType,std::string>EffectBaseName;
+extern BaseHashList<EffectType,std::string>EffectNameInDisk;
 void InitEffectBaseName();
 struct Effect
 {
@@ -43,14 +43,17 @@ private:
 	IngredientType type;
 	std::string description;
 public:
-	int num;
+	int num=0;
 	Ingredient(std::string name, int id, float basicHV,float duration,  IngredientType ty, std::string desc="", Effect eft = {EffectType::None, 0, ""}) :ID(id), name(name), basicHealValue(basicHV),duration(duration), cookedHealValue(2 * basicHV), description(desc), type(ty), effect(eft) { num=0; }
 	Ingredient() { num=0; }
 	std::string GetName()const;
 	std::string GetDesc()const;
-	EffectType GetCookedEffect();
-	int GetHealValue();
+	EffectType GetCookedEffectType() const;
 	int GetID() const;
+	float GetDuration() const;
+	int GetHealValue() const;
+	float GetCookHealValue() const;
+	Effect GetEffect()const;
 	IngredientType GetType() const{ return type; }
 	bool operator == (const Ingredient& ohterIngredient);
 };
@@ -74,29 +77,33 @@ public:
 		for(int i=0;i<foods.size();i++)
 		{
 			bool r=false;
+			cout << "当前食材:" << foods[i].GetName()<<endl;
 			ptr=specialIngredientNeeds[foods[i].GetID()];
 			if (ptr != nullptr)
 			{
 				(*ptr)++; 
 				r = true;
+				cout << "相同匹配" << endl;
 			}
 			if (r)
-				break;
-			for(int j=0;j<specialIngredientNeedsAlternative.size();i++)
+				continue;
+			for(int j=0;j<specialIngredientNeedsAlternative.size();j++)
 			{
 				ptr = specialIngredientNeedsAlternative[j][foods[i].GetID()];
 				if (ptr != nullptr)
 				{
+				cout << "可选匹配" << endl;
 					(*ptr)++; 
 					r = true;
 					break;
 				}
 			}
 			if (r)
-				break;
+				continue;
 			ptr=typeNeeds[foods[i].GetType()];
 			if (ptr != nullptr)
 			{
+				cout << "种类匹配" << endl;
 				(*ptr)++; 
 				r = true;
 			}
@@ -167,12 +174,6 @@ private:
 		tmpList.push_back(FindMinID(allSpecialIngredients.GetHead()));
 		for (int i = 0;i < allSpecialIngredients.size();i++)
 			aSI.push_back(allSpecialIngredients[i]);
-		for (int i = 0;i < allAlterNativeSpecialIngredients.size();i++)
-		{
-			tmpList.push_back(FindMinID(allAlterNativeSpecialIngredients[i].GetHead()));
-			for (int j = 0;j < allAlterNativeSpecialIngredients[i].size();j++)
-				aSI.push_back(allAlterNativeSpecialIngredients[i][j]);
-		}
 		if (tmpList.size() != 0)
 		{
 			minID = FindMinID(tmpList.GetHead());
@@ -335,6 +336,17 @@ public:
 	}
 private:
 };
+struct Disk
+{
+	string name;
+	float HealValue;
+	float duration;
+	int level;
+	EffectType type;
+	std::string description;
+};
+void DisplayDisk(const Disk& disk);
+Disk GetFinalDisk(const List<Ingredient>& foods, string name);
 extern Bag bag;
 extern RecipeHashListID IDRecipeMap;
 extern RecipeHashListType TypeRecipeMap;

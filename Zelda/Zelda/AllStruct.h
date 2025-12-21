@@ -43,7 +43,7 @@ public:
 	{
 		return length;
 	}
-	void Push(T data)
+	void Push(const T& data)
 	{
 		length++;
 		ListNode<T>* node = new ListNode<T>(data);
@@ -56,6 +56,16 @@ public:
 			node->next = head;
 			head = node;
 		}
+	}
+	void Clear()
+	{
+		while(head!=nullptr)
+		{
+			ListNode<T>* tmp = head;
+			head = head->next;
+			delete tmp;
+		}
+		length = 0;
 	}
 	void Pop(T& data)
 	{
@@ -242,16 +252,11 @@ public:
 	{
 		Node = new List<HashData>[mapSize];
 	}
-	void InsertByKey(K key, T data)
+	void InsertByKey(const K& key, const T& data)
 	{
 		int id = HashFunc(key);
 		if (id < 0)
 			id = -id;
-		Insert(id, data);
-	}
-	void InsertByKey(K key, T data,bool is)
-	{
-		int id = HashFunc(key);
 		Insert(id, data);
 	}
 	T* operator[](K key)
@@ -266,7 +271,7 @@ public:
 		return nullptr;
 	}
 protected:
-	bool Insert(int id,T data)
+	bool Insert(int id,const T& data)
 	{
 		int order = id % mapSize;
 		if (Node[order].size() == 0)

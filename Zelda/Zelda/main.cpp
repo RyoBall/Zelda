@@ -4,6 +4,7 @@
 using namespace std;
 #include "AllStruct.h"
 #include "Ingredient.h"
+List<Disk> disks;
 void DisplayFoods(Stack<Ingredient> foods);
 int GetTypeNum(const List<Ingredient>& foods)
 {
@@ -37,10 +38,11 @@ void Cook()
 	Stack<Ingredient> foods;
 	while (true)
 	{
-		cout << "请选择操作" << endl;
+		cout << "===请选择操作===" << endl;
 		cout << "1.添加食材" << endl;
 		cout << "2.移除食材" << endl;
 		cout << "3.开始烹饪" << endl;
+		cout << "4.结束烹饪" << endl;
 		int order;
 		cin >> order;
 		if (order == 1)
@@ -81,11 +83,14 @@ void Cook()
 			{
 				for (int i = 0;i < rightRecipes->size();i++)
 				{
-					cout << rightRecipes->size() << endl;
+					cout << "IDFind:" << (*rightRecipes)[i].GetName() << endl;
 					if ((*rightRecipes)[i].Rule(foodList))
 					{
 						name = (*rightRecipes)[i].GetName();
-						cout << name << endl;
+						cout << "成功制作:" << name << endl;
+						Disk disk = GetFinalDisk(foodList, name);
+						disks.push_back(disk);
+						foods.Clear();
 						break;
 					}
 				}
@@ -102,10 +107,14 @@ void Cook()
 				{
 					for (int i = 0;i < rightRecipes->size();i++)
 					{
-						cout << (*rightRecipes)[i].GetName();
+						cout << "TypeFind:" << (*rightRecipes)[i].GetName() << endl;
 						if ((*rightRecipes)[i].Rule(foodList))
 						{
 							name = (*rightRecipes)[i].GetName();
+							cout << "成功制作:" << name << endl;
+							Disk disk = GetFinalDisk(foodList, name);
+							disks.push_back(disk);
+							foods.Clear();
 							break;
 						}
 					}
@@ -113,11 +122,16 @@ void Cook()
 				if (name == "")
 				{
 					cout << "未找到菜谱" << endl;
+					foods.Clear();
 				}
 				else
 					cout << name << endl;
 			}
 		}
+		else if (order == 4)
+			break;
+		else
+			cout << "无效输入" << endl;
 	}
 }
 void DisplayFoods(Stack<Ingredient> foods)
@@ -163,6 +177,33 @@ void AddUnit()
 	bag.AddUnit(unitList[order - 1], num);
 	bag.Display();
 }
+void DisplayDisks(const List<Disk>& disks)
+{
+	cout << "====菜肴====" << endl;
+	for(int i=0;i<disks.size();i++)
+	{
+		cout << i + 1 << '.' << disks[i].name << endl;
+	}
+	while(true)
+	{
+	cout << "请选择操作" << endl;
+	cout << "0.结束" << endl;
+	cout << "1.展示详细属性" << endl;
+	int order;
+	cin >> order;
+	if (order == 0)
+		break;
+	else if(order==1)
+	{
+		cout << "请选择要展示的菜肴" << endl;
+		cin >> order;
+		if(order>0&&order<=disks.size())
+		{
+			DisplayDisk(disks[order-1]);
+		}
+	}
+	}
+}
 int main()
 {
 	InitAllUnits();
@@ -175,6 +216,7 @@ int main()
 		cout << "1. 查看食材背包" << endl;
 		cout << "2. 添加食材" << endl;
 		cout << "3. 开始烹饪" << endl;
+		cout << "4. 查看菜肴背包" << endl;
 		cin >> order;
 		if (order == 1)
 			bag.Display();
@@ -182,9 +224,12 @@ int main()
 			AddUnit();
 		else if (order == 3)
 			Cook();
+		else if (order == 4)
+			DisplayDisks(disks);
 		else
 			cout << "无效输入" << endl;
 	}
 	AddUnit();
 }
 //2 34 2 2 49 2 3 1 1 1 2 3
+//2 32 5 2 70 5 2 73 5 2 82 5 3 1 1 1 2 1 3 1 4 3

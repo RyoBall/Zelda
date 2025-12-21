@@ -47,12 +47,12 @@ std::string Ingredient::GetDesc() const
 	return description;
 }
 
-EffectType Ingredient::GetCookedEffect()
+EffectType Ingredient::GetCookedEffectType() const
 {
 	return effect.effectType;
 }
 
-int Ingredient::GetHealValue()
+int Ingredient::GetHealValue() const
 {
 	return basicHealValue;
 }
@@ -62,10 +62,38 @@ int Ingredient::GetID() const
 	return ID;
 }
 
+float Ingredient::GetDuration() const
+{
+	return duration;
+}
+
+float Ingredient::GetCookHealValue() const
+{
+	return cookedHealValue;
+}
+
+Effect Ingredient::GetEffect() const
+{
+	return effect;
+}
+
 bool Ingredient::operator==(const Ingredient& otherIngredient)
 {
 	return ID == otherIngredient.ID;
 }
+
+BaseHashList<EffectType, std::string> EffectNameInDisk{
+	{EffectType::None, ""},
+	{EffectType::ColdDef, "冰冷"},
+	{EffectType::Attack, "大剑"},
+	{EffectType::Defence, "铠甲"},
+	{EffectType::Speed, "速速"},
+	{EffectType::Health, "生命"},
+	{EffectType::Sneaky, "潜行"},
+	{EffectType::WarmDef, "暖暖"},
+	{EffectType::FireDef, "耐火"},
+	{EffectType::ParalysisDef, "酥麻"}
+};
 
 void InitEffectBaseName()
 {
@@ -849,20 +877,18 @@ void InitAllRecipes()
 			ingredientMap["海拉鲁米"]->GetID(),
 			ingredientMap["山羊黄油"]->GetID(),
 			ingredientMap["岩盐"]->GetID(),
-			ingredientMap["生命鲈鱼"]->GetID()
+			ingredientMap["生命三文鱼"]->GetID()
 			}),
 		*(new List<List<int>>{
 			}),
-		*(new List<IngredientType>{}),
-		*(new BaseHashList<int, int>{
-			std::make_pair(ingredientMap["海拉鲁米"]->GetID(), 0),
-			std::make_pair(ingredientMap["山羊黄油"]->GetID(), 0),
-			std::make_pair(ingredientMap["岩盐"]->GetID(), 0)
-			}),
-		*(new List<BaseHashList<int, int>>{
+			*(new List<IngredientType>{}),
 			*(new BaseHashList<int, int>{
-				std::make_pair(ingredientMap["生命鲈鱼"]->GetID(), 0)
-			})
+				std::make_pair(ingredientMap["海拉鲁米"]->GetID(), 0),
+				std::make_pair(ingredientMap["山羊黄油"]->GetID(), 0),
+				std::make_pair(ingredientMap["岩盐"]->GetID(), 0),
+				std::make_pair(ingredientMap["生命三文鱼"]->GetID(), 0)
+				}),
+		*(new List<BaseHashList<int, int>>{
 			}),
 		*(new BaseHashList<IngredientType, int>{})
 	);
@@ -873,20 +899,18 @@ void InitAllRecipes()
 		"生命干煎三文鱼",
 		*(new List<int>{
 			ingredientMap["塔邦挞小麦"]->GetID(),
-			ingredientMap["山羊黄油"]->GetID()
+			ingredientMap["山羊黄油"]->GetID(),
+			ingredientMap["生命三文鱼"]->GetID()
 			}),
 		*(new List<List<int>>{
-			*(new List<int>{ingredientMap["生命鲈鱼"]->GetID()})
 			}),
 		*(new List<IngredientType>{}),
 		*(new BaseHashList<int, int>{
 			std::make_pair(ingredientMap["塔邦挞小麦"]->GetID(), 0),
-			std::make_pair(ingredientMap["山羊黄油"]->GetID(), 0)
+			std::make_pair(ingredientMap["山羊黄油"]->GetID(), 0),
+			std::make_pair(ingredientMap["生命三文鱼"]->GetID(), 0)
 			}),
 		*(new List<BaseHashList<int, int>>{
-			*(new BaseHashList<int, int>{
-				std::make_pair(ingredientMap["生命鲈鱼"]->GetID(), 0)
-			})
 			}),
 		*(new BaseHashList<IngredientType, int>{})
 	);
@@ -898,21 +922,19 @@ void InitAllRecipes()
 		*(new List<int>{
 			ingredientMap["塔邦挞小麦"]->GetID(),
 			ingredientMap["鲜奶"]->GetID(),
-			ingredientMap["山羊黄油"]->GetID()
+			ingredientMap["山羊黄油"]->GetID(),
+			ingredientMap["生命海螺"]->GetID()
 			}),
 		*(new List<List<int>>{
-			*(new List<int>{ingredientMap["生命海螺"]->GetID()})
 			}),
 		*(new List<IngredientType>{}),
 		*(new BaseHashList<int, int>{
 			std::make_pair(ingredientMap["塔邦挞小麦"]->GetID(), 0),
 			std::make_pair(ingredientMap["鲜奶"]->GetID(), 0),
-			std::make_pair(ingredientMap["山羊黄油"]->GetID(), 0)
+			std::make_pair(ingredientMap["山羊黄油"]->GetID(), 0),
+			std::make_pair(ingredientMap["生命海螺"]->GetID(), 0)
 			}),
 		*(new List<BaseHashList<int, int>>{
-			*(new BaseHashList<int, int>{
-				std::make_pair(ingredientMap["生命海螺"]->GetID(), 0)
-			})
 			}),
 		*(new BaseHashList<IngredientType, int>{})
 	);
@@ -1602,6 +1624,126 @@ void InitIngredientMap()
 		ingredientMapID.InsertByKey(unitList[i].GetID(), unitList[i]);
 	}
 }
+
+int GetEffectLevel(int level, EffectType type)
+{
+	switch (type)
+	{
+	case EffectType::None:
+		return 0;
+		break;
+	case EffectType::Attack:
+		if (level < 5)
+			return 1;
+		else if (level >= 5 && level < 7)
+			return 2;
+		else
+			return 3;
+		break;
+	case EffectType::Defence:
+		if (level < 5)
+			return 1;
+		else if (level >= 5 && level < 7)
+			return 2;
+		else
+			return 3;
+		break;
+	case EffectType::Speed:
+		if (level < 5)
+			return 1;
+		else if (level >= 5 && level < 7)
+			return 2;
+		else
+			return 3;
+		break;
+	case EffectType::Health:
+		return 0;
+		break;
+	case EffectType::Sneaky:
+		if (level < 6)
+			return 1;
+		else if (level >= 6 && level < 9)
+			return 2;
+		else
+			return 3;
+		break;
+	case EffectType::WarmDef:
+		if (level < 6)
+			return 1;
+		else
+			return 2;
+		break;
+	case EffectType::ColdDef:
+		if (level < 6)
+			return 1;
+		else
+			return 2;
+		break;
+	case EffectType::FireDef:
+		if (level < 7)
+			return 1;
+		else
+			return 2;
+		break;
+	case EffectType::ParalysisDef:
+		if (level < 4)
+			return 1;
+		else if (level >= 4 && level < 6)
+			return 2;
+		else
+			return 3;
+		break;
+	default:
+		break;
+	}
+}
+
+
+void DisplayDisk(const Disk& disk)
+{
+	cout << "名字:" << disk.name << endl;
+	cout << "回血量:" << disk.HealValue << endl;
+	cout << "效果等级:" << disk.level << endl;
+	cout << "持续时间:" << disk.duration << endl;
+}
+
+Disk GetFinalDisk(const List<Ingredient>& foods, string name)
+{
+	Disk disk=Disk();
+	int levelNums=0;
+	bool typeContract = false;
+	for (int i = 0;i < foods.size();i++)
+	{
+		disk.HealValue += foods[i].GetCookHealValue();
+		disk.duration += foods[i].GetDuration();
+		if (!typeContract)
+		{
+			if (disk.type == EffectType::None)
+			{
+				disk.type = foods[i].GetCookedEffectType();
+			}
+			else
+			{
+				if (disk.type == foods[i].GetCookedEffectType())
+				{
+					typeContract = true;
+					disk.type == EffectType::None;
+				}
+			}
+		}
+		levelNums += foods[i].GetEffect().level;
+	}
+	string* firstName = EffectNameInDisk[disk.type];
+	if(firstName!=nullptr)
+	disk.name = *firstName + name;
+	else
+	{
+	disk.name = *firstName + name;
+	}
+	disk.level = GetEffectLevel(levelNums, disk.type);
+	return disk;
+}
+
 
 void InitAllUnits()
 {

@@ -1,17 +1,21 @@
-﻿  main.cpp
-D:\zelda\Zelda\Zelda\AllStruct.h(292,9): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-  (编译源文件“main.cpp”)
-      D:\zelda\Zelda\Zelda\AllStruct.h(292,9):
+﻿  Ingredient.cpp
+D:\zelda\Zelda\Zelda\Ingredient.cpp(57,9): warning C4244: “return”: 从“const float”转换到“int”，可能丢失数据
+D:\zelda\Zelda\Zelda\Ingredient.cpp(1734,16): warning C4553: “==”: 未使用表达式结果；是否打算使用“=”?
+D:\zelda\Zelda\Zelda\Ingredient.cpp(1847,158): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\zelda\Zelda\Zelda\AllStruct.h(297,9): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  (编译源文件“Ingredient.cpp”)
+      D:\zelda\Zelda\Zelda\AllStruct.h(297,9):
       模板实例化上下文(最早的实例化上下文)为
-          D:\zelda\Zelda\Zelda\Ingredient.h(227,29):
+          D:\zelda\Zelda\Zelda\Ingredient.h(228,29):
           查看对正在编译的 类 模板 实例化“BaseHashList<int,List<Recipe>>”的引用
-          D:\zelda\Zelda\Zelda\AllStruct.h(290,13):
+          D:\zelda\Zelda\Zelda\AllStruct.h(295,13):
           在编译 类 模板 成员函数“int BaseHashList<int,List<Recipe>>::HashFunc(K)”时
           with
           [
               K=int
           ]
-              D:\zelda\Zelda\Zelda\Ingredient.h(248,10):
+              D:\zelda\Zelda\Zelda\Ingredient.h(249,10):
               请参阅 "RecipeHashListID::Insert" 中对 "BaseHashList<int,List<Recipe>>::HashFunc" 的第一个引用
   
+D:\zelda\Zelda\Zelda\Ingredient.cpp(1703,1): warning C4715: “GetEffectLevel”: 不是所有的控件路径都返回值
   Zelda.vcxproj -> D:\zelda\Zelda\x64\Debug\Zelda.exe
