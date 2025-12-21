@@ -75,6 +75,11 @@ void Cook()
 		}
 		else if (order == 3)
 		{
+			if(foods.size()==0)
+			{
+				cout << "食材锅为空" << endl;
+				continue;
+			}
 			int minID = FindMinID(foods.GetHead());//找到列表最小的ID
 			List<Recipe>* rightRecipes = IDRecipeMap[minID];//通过ID寻找菜谱
 			List<Ingredient>foodList = StackToList<Ingredient>(foods);//把栈转换成链表，方便后续操作
@@ -100,7 +105,7 @@ void Cook()
 				rightRecipes = TypeRecipeMap[num];
 				if (rightRecipes == nullptr)
 				{
-					cout << "未找到同类菜谱" << endl;
+					;
 				}
 				else
 				{
@@ -120,7 +125,8 @@ void Cook()
 				}
 				if (name == "")
 				{
-					cout << "未找到菜谱" << endl;
+					Disk disk = GetFinalDisk(foodList, "大杂烩");
+					disks.push_back(disk);
 					foods.Clear();
 				}
 				else

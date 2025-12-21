@@ -270,6 +270,20 @@ Disk GetFinalDisk(const List<Ingredient>& foods, string name)
 void InitAllRecipes()
 {
 	// ==================== VEGETABLE RECIPES Êß²ËÀà²ËÆ× ====================
+	// ³´Ò°²Ë£¨Êß²Ë£©
+	Recipe FriedWildVegetables(
+		"³´Ò°²Ë",
+		*(new List<int>{}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Vegetable }),
+		*(new BaseHashList<int, int>{}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Vegetable, 0}
+			})
+	);
+	IDRecipeMap.Insert(FriedWildVegetables);
+	TypeRecipeMap.Insert(FriedWildVegetables);
 	 // ¸ÊÂ¶ìÀÊß²Ë£¨Êß²Ë + ¾«Á¦·äµÄ·äÃÛ£©
 	Recipe SweetStewedVegetables(
 		"¸ÊÂ¶ìÀÊß²Ë",
@@ -1664,6 +1678,489 @@ void InitAllRecipes()
 		*(new List<BaseHashList<int, int>>{}),
 		*(new BaseHashList<IngredientType, int>{})
 	);
+	// ===================ÈâÀà=================
+	// ¿¾Èâ´®£¨ÈÎÒâÈâÀà£©
+	Recipe MeatSkewers(
+		"¿¾Èâ´®",
+		*(new List<int>{}), // ²»ĞèÒªÌØ¶¨Ê³²Ä
+		*(new List<List<int>>{}), // Ã»ÓĞ¿ÉÑ¡Ê³²Ä×é
+		*(new List<IngredientType>{ IngredientType::Meat }), // ĞèÒªÈâÀà
+		*(new BaseHashList<int, int>{}), // ¶ÔÓ¦µÚÒ»¸ö²ÎÊıµÄÊıÁ¿
+		*(new List<BaseHashList<int, int>>{}), // ¶ÔÓ¦µÚ¶ş¸ö²ÎÊıµÄÊıÁ¿
+		*(new BaseHashList<IngredientType, int>{ {IngredientType::Meat, 0} }) // ÈâÀàÊıÁ¿ÖÁÉÙ1¸ö£¨0±íÊ¾ÖÁÉÙ1¸ö£©
+	);
+	IDRecipeMap.Insert(MeatSkewers);
+
+	// ÏãÀ±¼åÈâ£¨ÈâÀà+Å¯Å¯²İ¹û£©
+	Recipe SpicyFriedMeat(
+		"ÏãÀ±¼åÈâ",
+		*(new List<int>{ ingredientMap["Å¯Å¯²İ¹û"]->GetID() }), // ±ØĞëÓĞÅ¯Å¯²İ¹û
+		*(new List<List<int>>{}), // Ã»ÓĞ¿ÉÑ¡Ê³²Ä×é
+		*(new List<IngredientType>{ IngredientType::Meat }), // ĞèÒªÈâÀà
+		*(new BaseHashList<int, int>{ std::make_pair(ingredientMap["Å¯Å¯²İ¹û"]->GetID(), 0) }), // Å¯Å¯²İ¹ûÖÁÉÙ1¸ö
+		*(new List<BaseHashList<int, int>>{}), // ¶ÔÓ¦µÚ¶ş¸ö²ÎÊıµÄÊıÁ¿
+		*(new BaseHashList<IngredientType, int>{ {IngredientType::Meat, 0} }) // ÈâÀàÊıÁ¿ÖÁÉÙ1¸ö
+	);
+	IDRecipeMap.Insert(SpicyFriedMeat);
+	// ¿¾ÈâÄ¢¹½´®£¨ÈâÀà+¾úÀà£©
+	Recipe MeatMushroomSkewers(
+		"¿¾ÈâÄ¢¹½´®",
+		*(new List<int>{}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat, IngredientType::Mushroom }),
+		*(new BaseHashList<int, int>{}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0},
+			{IngredientType::Mushroom, 0}
+			})
+	);
+	IDRecipeMap.Insert(MeatMushroomSkewers);
+
+	// ÕôÈâ£¨ÈâÀà+Êß²Ë£©
+	Recipe SteamedMeat(
+		"ÕôÈâ",
+		*(new List<int>{}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat, IngredientType::Vegetable }),
+		*(new BaseHashList<int, int>{}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0},
+			{IngredientType::Vegetable, 0}
+			})
+	);
+	IDRecipeMap.Insert(SteamedMeat);
+
+	// ÏÊÈâÅ£ÄÌÌÀ£¨ÈâÀà+Êß²Ë+ÏÊÄÌ+ÑÒÑÎ£©
+	Recipe MeatMilkSoup(
+		"ÏÊÈâÅ£ÄÌÌÀ",
+		*(new List<int>{
+			ingredientMap["ÏÊÄÌ"]->GetID(),
+			ingredientMap["ÑÒÑÎ"]->GetID()
+			}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat, IngredientType::Vegetable }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["ÏÊÄÌ"]->GetID(), 0),
+			std::make_pair(ingredientMap["ÑÒÑÎ"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0},
+			{IngredientType::Vegetable, 0}
+			})
+	);
+	IDRecipeMap.Insert(MeatMilkSoup);
+
+	// ÄÏ¹ÏÄğÈâ£¨ÈâÀà+îø¼×ÄÏ¹Ï£©
+	Recipe PumpkinStuffedMeat(
+		"ÄÏ¹ÏÄğÈâ",
+		*(new List<int>{ ingredientMap["îø¼×ÄÏ¹Ï"]->GetID() }),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["îø¼×ÄÏ¹Ï"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0}
+			})
+	);
+	IDRecipeMap.Insert(PumpkinStuffedMeat);
+
+	// º£Â½¼åÉÕ£¨ÈâÀà+ÓãÀà£©
+	Recipe LandAndSeaPanFry(
+		"º£Â½¼åÉÕ",
+		*(new List<int>{}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat, IngredientType::Fish }),
+		*(new BaseHashList<int, int>{}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0},
+			{IngredientType::Fish, 0}
+			})
+	);
+	IDRecipeMap.Insert(LandAndSeaPanFry);
+
+	// ¸ÊÂ¶ìÀÈâ£¨ÈâÀà+¾«Á¦·äµÄ·äÃÛ£©
+	Recipe SweetStewedMeat(
+		"¸ÊÂ¶ìÀÈâ",
+		*(new List<int>{ ingredientMap["¾«Á¦·äµÄ·äÃÛ"]->GetID() }),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["¾«Á¦·äµÄ·äÃÛ"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0}
+			})
+	);
+	IDRecipeMap.Insert(SweetStewedMeat);
+
+	// ÏÊÈâ·¹ÍÅ£¨ÈâÀà+º£À­Â³Ã×£©
+	Recipe MeatRiceBalls(
+		"ÏÊÈâ·¹ÍÅ",
+		*(new List<int>{ ingredientMap["º£À­Â³Ã×"]->GetID() }),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["º£À­Â³Ã×"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0}
+			})
+	);
+	IDRecipeMap.Insert(MeatRiceBalls);
+
+	// ÇİÈâ²Ë·¹£¨ÇİÈâ+º£À­Â³Ã×+Çİµ°+É½Ñò»ÆÓÍ£©
+	Recipe PoultryVegetableRice(
+		"ÇİÈâ²Ë·¹",
+		*(new List<int>{
+			ingredientMap["º£À­Â³Ã×"]->GetID(),
+			ingredientMap["Çİµ°"]->GetID(),
+			ingredientMap["É½Ñò»ÆÓÍ"]->GetID()
+			}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["º£À­Â³Ã×"]->GetID(), 0),
+			std::make_pair(ingredientMap["Çİµ°"]->GetID(), 0),
+			std::make_pair(ingredientMap["É½Ñò»ÆÓÍ"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0}
+			})
+	);
+	IDRecipeMap.Insert(PoultryVegetableRice);
+
+	// ÊŞÈâ¸Ç·¹£¨ÊŞÈâ+º£À­Â³Ã×+ÑÒÑÎ£©
+	Recipe BeastMeatRiceBowl(
+		"ÊŞÈâ¸Ç·¹",
+		*(new List<int>{
+			ingredientMap["º£À­Â³Ã×"]->GetID(),
+			ingredientMap["ÑÒÑÎ"]->GetID()
+			}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["º£À­Â³Ã×"]->GetID(), 0),
+			std::make_pair(ingredientMap["ÑÒÑÎ"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0}
+			})
+	);
+	IDRecipeMap.Insert(BeastMeatRiceBowl);
+
+	// ÊŞÈâ¿§à¬·¹£¨ÊŞÈâ+º£À­Â³Ã×+¹ÄÂ¡µÄµ÷Î¶·Û£©
+	Recipe BeastMeatCurry(
+		"ÊŞÈâ¿§à¬·¹",
+		*(new List<int>{
+			ingredientMap["º£À­Â³Ã×"]->GetID(),
+			ingredientMap["¹ÄÂ¡µÄµ÷Î¶·Û"]->GetID()
+			}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["º£À­Â³Ã×"]->GetID(), 0),
+			std::make_pair(ingredientMap["¹ÄÂ¡µÄµ÷Î¶·Û"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0}
+			})
+	);
+	IDRecipeMap.Insert(BeastMeatCurry);
+
+	// ÇİÈâ¿§à¬·¹£¨ÇİÈâ+º£À­Â³Ã×+¹ÄÂ¡µÄµ÷Î¶·Û£©
+	Recipe PoultryCurry(
+		"ÇİÈâ¿§à¬·¹",
+		*(new List<int>{
+			ingredientMap["º£À­Â³Ã×"]->GetID(),
+			ingredientMap["¹ÄÂ¡µÄµ÷Î¶·Û"]->GetID()
+			}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["º£À­Â³Ã×"]->GetID(), 0),
+			std::make_pair(ingredientMap["¹ÄÂ¡µÄµ÷Î¶·Û"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0}
+			})
+	);
+	IDRecipeMap.Insert(PoultryCurry);
+
+	// ìËÈâ£¨ÈâÀà+Ëş°îÌ¢Ğ¡Âó+ÏÊÄÌ+É½Ñò»ÆÓÍ£©
+	Recipe StewedMeat(
+		"ìËÈâ",
+		*(new List<int>{
+			ingredientMap["Ëş°îÌ¢Ğ¡Âó"]->GetID(),
+			ingredientMap["ÏÊÄÌ"]->GetID(),
+			ingredientMap["É½Ñò»ÆÓÍ"]->GetID()
+			}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["Ëş°îÌ¢Ğ¡Âó"]->GetID(), 0),
+			std::make_pair(ingredientMap["ÏÊÄÌ"]->GetID(), 0),
+			std::make_pair(ingredientMap["É½Ñò»ÆÓÍ"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0}
+			})
+	);
+	IDRecipeMap.Insert(StewedMeat);
+
+	// ÏÊÈâÅÉ£¨ÈâÀà+Ëş°îÌ¢Ğ¡Âó+É½Ñò»ÆÓÍ+ÑÒÑÎ£©
+	Recipe MeatPie(
+		"ÏÊÈâÅÉ",
+		*(new List<int>{
+			ingredientMap["Ëş°îÌ¢Ğ¡Âó"]->GetID(),
+			ingredientMap["É½Ñò»ÆÓÍ"]->GetID(),
+			ingredientMap["ÑÒÑÎ"]->GetID()
+			}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["Ëş°îÌ¢Ğ¡Âó"]->GetID(), 0),
+			std::make_pair(ingredientMap["É½Ñò»ÆÓÍ"]->GetID(), 0),
+			std::make_pair(ingredientMap["ÑÒÑÎ"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0}
+			})
+	);
+	IDRecipeMap.Insert(MeatPie);
+
+	// ¿¾ÊŞÈâ´®£¨ÊŞÈâÀà+¹ÄÂ¡µÄµ÷Î¶·Û£©
+	Recipe GrilledBeastMeatSkewers(
+		"¿¾ÊŞÈâ´®",
+		*(new List<int>{ ingredientMap["¹ÄÂ¡µÄµ÷Î¶·Û"]->GetID() }),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["¹ÄÂ¡µÄµ÷Î¶·Û"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0}
+			})
+	);
+	IDRecipeMap.Insert(GrilledBeastMeatSkewers);
+
+	// ¿¾ÇİÈâ´®£¨ÇİÈâÀà+¹ÄÂ¡µÄµ÷Î¶·Û£©
+	Recipe GrilledPoultrySkewers(
+		"¿¾ÇİÈâ´®",
+		*(new List<int>{ ingredientMap["¹ÄÂ¡µÄµ÷Î¶·Û"]->GetID() }),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["¹ÄÂ¡µÄµ÷Î¶·Û"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0}
+			})
+	);
+	IDRecipeMap.Insert(GrilledPoultrySkewers);
+
+	// ÑÒÑÎ¿¾Èâ£¨ÈâÀà+ÑÒÑÎ£©
+	Recipe SaltRoastedMeat(
+		"ÑÒÑÎ¿¾Èâ",
+		*(new List<int>{ ingredientMap["ÑÒÑÎ"]->GetID() }),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Meat }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["ÑÒÑÎ"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Meat, 0}
+			})
+	);
+	// ¿¾Ä¢¹½´®£¨ÈÎÒâ¾úÀà£©
+	Recipe GrilledMushroomSkewers(
+		"¿¾Ä¢¹½´®",
+		*(new List<int>{}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Mushroom }),
+		*(new BaseHashList<int, int>{}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Mushroom, 0}
+			})
+	);
+	IDRecipeMap.Insert(GrilledMushroomSkewers);
+
+	// Ë®¹û°èÄ¢¹½£¨¾úÀà+Ë®¹û£©
+	Recipe FruitMushroomSalad(
+		"Ë®¹û°èÄ¢¹½",
+		*(new List<int>{}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Mushroom, IngredientType::Fruit }),
+		*(new BaseHashList<int, int>{}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Mushroom, 0},
+			{IngredientType::Fruit, 0}
+			})
+	);
+	IDRecipeMap.Insert(FruitMushroomSalad);
+
+	// ÕôÄ¢¹½£¨¾úÀà+Êß²Ë£©
+	Recipe SteamedMushrooms(
+		"ÕôÄ¢¹½",
+		*(new List<int>{}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Mushroom, IngredientType::Vegetable }),
+		*(new BaseHashList<int, int>{}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Mushroom, 0},
+			{IngredientType::Vegetable, 0}
+			})
+	);
+	IDRecipeMap.Insert(SteamedMushrooms);
+
+	// Ä¢¹½Å£ÄÌÌÀ£¨¾úÀà+Êß²Ë+ÏÊÄÌ+ÑÒÑÎ£©
+	Recipe MushroomMilkSoup(
+		"Ä¢¹½Å£ÄÌÌÀ",
+		*(new List<int>{
+			ingredientMap["ÏÊÄÌ"]->GetID(),
+			ingredientMap["ÑÒÑÎ"]->GetID()
+			}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Mushroom, IngredientType::Vegetable }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["ÏÊÄÌ"]->GetID(), 0),
+			std::make_pair(ingredientMap["ÑÒÑÎ"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Mushroom, 0},
+			{IngredientType::Vegetable, 0}
+			})
+	);
+	IDRecipeMap.Insert(MushroomMilkSoup);
+
+	// ¸ÊÂ¶Ä¢¹½£¨¾úÀà+¾«Á¦·äµÄ·äÃÛ£©
+	Recipe SweetMushrooms(
+		"¸ÊÂ¶Ä¢¹½",
+		*(new List<int>{ ingredientMap["¾«Á¦·äµÄ·äÃÛ"]->GetID() }),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Mushroom }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["¾«Á¦·äµÄ·äÃÛ"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Mushroom, 0}
+			})
+	);
+	IDRecipeMap.Insert(SweetMushrooms);
+
+	// Ä¢¹½·¹ÍÅ£¨¾úÀà+º£À­Â³Ã×£©
+	Recipe MushroomRiceBalls(
+		"Ä¢¹½·¹ÍÅ",
+		*(new List<int>{ ingredientMap["º£À­Â³Ã×"]->GetID() }),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Mushroom }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["º£À­Â³Ã×"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Mushroom, 0}
+			})
+	);
+	IDRecipeMap.Insert(MushroomRiceBalls);
+
+	// Ä¢¹½»â·¹£¨¾úÀà+º£À­Â³Ã×+É½Ñò»ÆÓÍ+ÑÒÑÎ£©
+	Recipe MushroomRisotto(
+		"Ä¢¹½»â·¹",
+		*(new List<int>{
+			ingredientMap["º£À­Â³Ã×"]->GetID(),
+			ingredientMap["É½Ñò»ÆÓÍ"]->GetID(),
+			ingredientMap["ÑÒÑÎ"]->GetID()
+			}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Mushroom }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["º£À­Â³Ã×"]->GetID(), 0),
+			std::make_pair(ingredientMap["É½Ñò»ÆÓÍ"]->GetID(), 0),
+			std::make_pair(ingredientMap["ÑÒÑÎ"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Mushroom, 0}
+			})
+	);
+	IDRecipeMap.Insert(MushroomRisotto);
+
+	// Ä¢¹½¼åµ°¾í£¨¾úÀà+Çİµ°+É½Ñò»ÆÓÍ+ÑÒÑÎ£©
+	Recipe MushroomOmelette(
+		"Ä¢¹½¼åµ°¾í",
+		*(new List<int>{
+			ingredientMap["Çİµ°"]->GetID(),
+			ingredientMap["É½Ñò»ÆÓÍ"]->GetID(),
+			ingredientMap["ÑÒÑÎ"]->GetID()
+			}),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Mushroom }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["Çİµ°"]->GetID(), 0),
+			std::make_pair(ingredientMap["É½Ñò»ÆÓÍ"]->GetID(), 0),
+			std::make_pair(ingredientMap["ÑÒÑÎ"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Mushroom, 0}
+			})
+	);
+	IDRecipeMap.Insert(MushroomOmelette);
+
+	// ³´ÏãÄ¢¹½£¨¾úÀà+¹ÄÂ¡µÄµ÷Î¶·Û£©
+	Recipe FriedSpicyMushrooms(
+		"³´ÏãÄ¢¹½",
+		*(new List<int>{ ingredientMap["¹ÄÂ¡µÄµ÷Î¶·Û"]->GetID() }),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Mushroom }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["¹ÄÂ¡µÄµ÷Î¶·Û"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Mushroom, 0}
+			})
+	);
+	IDRecipeMap.Insert(FriedSpicyMushrooms);
+
+	// ÑÎ¿¾Ä¢¹½£¨¾úÀà+ÑÒÑÎ£©
+	Recipe SaltRoastedMushrooms(
+		"ÑÎ¿¾Ä¢¹½",
+		*(new List<int>{ ingredientMap["ÑÒÑÎ"]->GetID() }),
+		*(new List<List<int>>{}),
+		*(new List<IngredientType>{ IngredientType::Mushroom }),
+		*(new BaseHashList<int, int>{
+			std::make_pair(ingredientMap["ÑÒÑÎ"]->GetID(), 0)
+			}),
+		*(new List<BaseHashList<int, int>>{}),
+		*(new BaseHashList<IngredientType, int>{
+			{IngredientType::Mushroom, 0}
+			})
+	);
+	IDRecipeMap.Insert(SaltRoastedMushrooms);
+	IDRecipeMap.Insert(SaltRoastedMeat);
 	TypeRecipeMap.Insert(MonsterCurry);
 	TypeRecipeMap.Insert(SweetStewedVegetables);
 	TypeRecipeMap.Insert(VegetableRiceBalls);
@@ -1730,6 +2227,34 @@ void InitAllRecipes()
 	TypeRecipeMap.Insert(MonsterRiceBall);
 	TypeRecipeMap.Insert(MonsterSoup);
 	TypeRecipeMap.Insert(MonsterCurry);
+	TypeRecipeMap.Insert(MeatSkewers);
+	TypeRecipeMap.Insert(SpicyFriedMeat);
+	TypeRecipeMap.Insert(MeatMushroomSkewers);
+	TypeRecipeMap.Insert(SteamedMeat);
+	TypeRecipeMap.Insert(MeatMilkSoup);
+	TypeRecipeMap.Insert(PumpkinStuffedMeat);
+	TypeRecipeMap.Insert(LandAndSeaPanFry);
+	TypeRecipeMap.Insert(SweetStewedMeat);
+	TypeRecipeMap.Insert(MeatRiceBalls);
+	TypeRecipeMap.Insert(PoultryVegetableRice);
+	TypeRecipeMap.Insert(BeastMeatRiceBowl);
+	TypeRecipeMap.Insert(BeastMeatCurry);
+	TypeRecipeMap.Insert(PoultryCurry);
+	TypeRecipeMap.Insert(StewedMeat);
+	TypeRecipeMap.Insert(MeatPie);
+	TypeRecipeMap.Insert(GrilledBeastMeatSkewers);
+	TypeRecipeMap.Insert(GrilledPoultrySkewers);
+	TypeRecipeMap.Insert(SaltRoastedMeat);
+	TypeRecipeMap.Insert(GrilledMushroomSkewers);
+	TypeRecipeMap.Insert(FruitMushroomSalad);
+	TypeRecipeMap.Insert(SteamedMushrooms);
+	TypeRecipeMap.Insert(MushroomMilkSoup);
+	TypeRecipeMap.Insert(SweetMushrooms);
+	TypeRecipeMap.Insert(MushroomRiceBalls);
+	TypeRecipeMap.Insert(MushroomRisotto);
+	TypeRecipeMap.Insert(MushroomOmelette);
+	TypeRecipeMap.Insert(FriedSpicyMushrooms);
+	TypeRecipeMap.Insert(SaltRoastedMushrooms);
 }
 
 std::string GetEffectTypeName(EffectType type)
