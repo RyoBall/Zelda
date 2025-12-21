@@ -1,7 +1,5 @@
 #pragma once
 #include<iostream>
-#include<string>
-#include<functional>
 using namespace std;
 class Player;
 
@@ -59,12 +57,7 @@ public:
 	}
 	void Clear()
 	{
-		while(head!=nullptr)
-		{
-			ListNode<T>* tmp = head;
-			head = head->next;
-			delete tmp;
-		}
+		head = nullptr;
 		length = 0;
 	}
 	void Pop(T& data)
@@ -227,7 +220,9 @@ protected:
 	ListNode<T>* head;
 	ListNode<T>* last;
 };
+
 //目前思路，需要一个map，然后把菜肴的数组放进map里
+
 template<typename K,typename T>
 class BaseHashList
 {
