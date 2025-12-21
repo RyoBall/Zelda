@@ -104,6 +104,7 @@ void InitEffectBaseName()
 	EffectBaseName.InsertByKey(EffectType::Sneaky, "安静性提升");
 	EffectBaseName.InsertByKey(EffectType::WarmDef, "耐热防护");
 	EffectBaseName.InsertByKey(EffectType::ColdDef, "耐寒防护");
+	EffectBaseName.InsertByKey( EffectType::FireDef, "耐火防護" );
 	EffectBaseName.InsertByKey(EffectType::ParalysisDef, "电麻防护");
 	EffectBaseName.InsertByKey(EffectType::None, "");
 }
@@ -234,8 +235,6 @@ Disk GetFinalDisk(const List<Ingredient>& foods, string name)
 
 	for (int i = 0;i < foods.size();i++)
 	{
-		cout << foods[i].GetName() << endl;
-		cout << *EffectNameInDisk[disk.type] << endl;
 		disk.HealValue += foods[i].GetCookHealValue();
 		disk.duration += foods[i].GetDuration();
 		if (!typeContract)
@@ -255,7 +254,6 @@ Disk GetFinalDisk(const List<Ingredient>& foods, string name)
 		}
 		levelNums += foods[i].GetEffect().level;
 	}
-		cout << *EffectNameInDisk[disk.type] << endl;
 	string* firstName = EffectNameInDisk[disk.type];
 	if (firstName != nullptr)
 		disk.name = *firstName + name;
@@ -1734,12 +1732,19 @@ void InitAllRecipes()
 	TypeRecipeMap.Insert(MonsterCurry);
 }
 
-
+std::string GetEffectTypeName(EffectType type)
+{
+	std::string* name = EffectBaseName[type];
+	if (name != nullptr)
+		return *name;
+	return "UnknownEffect";
+}
 
 void DisplayDisk(const Disk& disk)
 {
 	cout << "名字:" << disk.name << endl;
 	cout << "回血量:" << disk.HealValue << endl;
+	cout << "效果类型:" << GetEffectTypeName(disk.type) << endl;
 	cout << "效果等级:" << disk.level << endl;
 	cout << "持续时间:" << disk.duration << endl;
 }

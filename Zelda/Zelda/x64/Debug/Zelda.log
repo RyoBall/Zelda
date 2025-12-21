@@ -1,7 +1,7 @@
 ﻿  Ingredient.cpp
 D:\zelda\Zelda\Zelda\Ingredient.cpp(57,9): warning C4244: “return”: 从“const float”转换到“int”，可能丢失数据
-D:\zelda\Zelda\Zelda\Ingredient.cpp(252,16): warning C4553: “==”: 未使用表达式结果；是否打算使用“=”?
-D:\zelda\Zelda\Zelda\Ingredient.cpp(1842,158): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+D:\zelda\Zelda\Zelda\Ingredient.cpp(251,16): warning C4553: “==”: 未使用表达式结果；是否打算使用“=”?
+D:\zelda\Zelda\Zelda\Ingredient.cpp(1847,158): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
 D:\zelda\Zelda\Zelda\AllStruct.h(292,9): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
   (编译源文件“Ingredient.cpp”)
       D:\zelda\Zelda\Zelda\AllStruct.h(292,9):
@@ -17,5 +17,5 @@ D:\zelda\Zelda\Zelda\AllStruct.h(292,9): warning C4267: “初始化”: 从“s
               D:\zelda\Zelda\Zelda\Ingredient.h(254,10):
               请参阅 "RecipeHashListID::Insert" 中对 "BaseHashList<int,List<Recipe>>::HashFunc" 的第一个引用
   
-D:\zelda\Zelda\Zelda\Ingredient.cpp(227,1): warning C4715: “GetEffectLevel”: 不是所有的控件路径都返回值
+D:\zelda\Zelda\Zelda\Ingredient.cpp(228,1): warning C4715: “GetEffectLevel”: 不是所有的控件路径都返回值
   Zelda.vcxproj -> D:\zelda\Zelda\x64\Debug\Zelda.exe
