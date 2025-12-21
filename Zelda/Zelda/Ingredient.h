@@ -72,6 +72,7 @@ public:
 	bool Rule(const List<Ingredient>& foods)
 	{
 		int* ptr;
+		cout << "可选数量" << this->specialIngredientNeedsAlternative.size() << endl;
 		foods.size();
 		for(int i=0;i<foods.size();i++)
 		{
@@ -88,6 +89,7 @@ public:
 				continue;
 			for(int j=0;j<specialIngredientNeedsAlternative.size();j++)
 			{
+				
 				ptr = specialIngredientNeedsAlternative[j][foods[i].GetID()];
 				if (ptr != nullptr)
 				{
@@ -173,10 +175,14 @@ private:
 		tmpList.push_back(FindMinID(allSpecialIngredients.GetHead()));
 		for (int i = 0;i < allSpecialIngredients.size();i++)
 			aSI.push_back(allSpecialIngredients[i]);
+		for(int i=0;i<allAlterNativeSpecialIngredients.size();i++)
+		{
+			for(int j=0;j<allAlterNativeSpecialIngredients[i].size();j++)
+			aSI.push_back(allAlterNativeSpecialIngredients[i][j]);
+		}
 		if (tmpList.size() != 0)
 		{
 			minID = FindMinID(tmpList.GetHead());
-			cout << name << minID << endl;
 		}
 		else
 		{
@@ -273,7 +279,6 @@ public:
 	void Insert(const Recipe& disk) override
 	{
 		int id = HashFunc(disk.GetTypeNum());
-		cout<<id;
 		int order = id%mapSize;
 		if (Node[order].size() == 0)
 		{

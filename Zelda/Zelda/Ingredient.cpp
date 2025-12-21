@@ -141,6 +141,134 @@ int FindMinID(ListNode<int>* f)
 			return minID;
 	}
 }
+
+BaseHashList<int, Ingredient> ingredientMapID;
+
+void InitIngredientMap()
+{
+	for (int i = 0;i < unitList.size();i++)
+	{
+		ingredientMap.InsertByKey(unitList[i].GetName(), unitList[i]);
+		ingredientMapID.InsertByKey(unitList[i].GetID(), unitList[i]);
+	}
+}
+
+int GetEffectLevel(int level, EffectType type)
+{
+	switch (type)
+	{
+	case EffectType::None:
+		return 0;
+		break;
+	case EffectType::Attack:
+		if (level < 5)
+			return 1;
+		else if (level >= 5 && level < 7)
+			return 2;
+		else
+			return 3;
+		break;
+	case EffectType::Defence:
+		if (level < 5)
+			return 1;
+		else if (level >= 5 && level < 7)
+			return 2;
+		else
+			return 3;
+		break;
+	case EffectType::Speed:
+		if (level < 5)
+			return 1;
+		else if (level >= 5 && level < 7)
+			return 2;
+		else
+			return 3;
+		break;
+	case EffectType::Health:
+		return 0;
+		break;
+	case EffectType::Sneaky:
+		if (level < 6)
+			return 1;
+		else if (level >= 6 && level < 9)
+			return 2;
+		else
+			return 3;
+		break;
+	case EffectType::WarmDef:
+		if (level < 6)
+			return 1;
+		else
+			return 2;
+		break;
+	case EffectType::ColdDef:
+		if (level < 6)
+			return 1;
+		else
+			return 2;
+		break;
+	case EffectType::FireDef:
+		if (level < 7)
+			return 1;
+		else
+			return 2;
+		break;
+	case EffectType::ParalysisDef:
+		if (level < 4)
+			return 1;
+		else if (level >= 4 && level < 6)
+			return 2;
+		else
+			return 3;
+		break;
+	default:
+		break;
+	}
+}
+
+Disk GetFinalDisk(const List<Ingredient>& foods, string name)
+{
+	Disk disk = Disk();
+	int levelNums = 0;
+	bool typeContract = false;
+
+	for (int i = 0;i < foods.size();i++)
+	{
+		cout << foods[i].GetName() << endl;
+		cout << *EffectNameInDisk[disk.type] << endl;
+		disk.HealValue += foods[i].GetCookHealValue();
+		disk.duration += foods[i].GetDuration();
+		if (!typeContract)
+		{
+			if (disk.type == EffectType::None)
+			{
+				disk.type = foods[i].GetCookedEffectType();
+			}
+			else
+			{
+				if (disk.type != foods[i].GetCookedEffectType())
+				{
+					typeContract = true;
+					disk.type == EffectType::None;
+				}
+			}
+		}
+		levelNums += foods[i].GetEffect().level;
+	}
+		cout << *EffectNameInDisk[disk.type] << endl;
+	string* firstName = EffectNameInDisk[disk.type];
+	if (firstName != nullptr)
+		disk.name = *firstName + name;
+	else
+	{
+		disk.name = *firstName + name;
+	}
+	disk.level = GetEffectLevel(levelNums, disk.type);
+	return disk;
+}
+
+
+
 void InitAllRecipes()
 {
 	// ==================== VEGETABLE RECIPES 蔬菜类菜谱 ====================
@@ -625,10 +753,6 @@ void InitAllRecipes()
 				ingredientMap["暖暖草果"]->GetID(),
 				ingredientMap["酥麻水果"]->GetID(),
 				ingredientMap["大剑香蕉"]->GetID(),
-				ingredientMap["生命小萝卜"]->GetID(),
-				ingredientMap["生命大萝卜"]->GetID(),
-				ingredientMap["毅力胡萝卜"]->GetID(),
-				ingredientMap["速速胡萝卜"]->GetID()
 			})
 			}),
 		*(new List<IngredientType>{}),
@@ -643,10 +767,6 @@ void InitAllRecipes()
 				std::make_pair(ingredientMap["暖暖草果"]->GetID(), 0),
 				std::make_pair(ingredientMap["酥麻水果"]->GetID(), 0),
 				std::make_pair(ingredientMap["大剑香蕉"]->GetID(), 0),
-				std::make_pair(ingredientMap["生命小萝卜"]->GetID(), 0),
-				std::make_pair(ingredientMap["生命大萝卜"]->GetID(), 0),
-				std::make_pair(ingredientMap["毅力胡萝卜"]->GetID(), 0),
-				std::make_pair(ingredientMap["速速胡萝卜"]->GetID(), 0)
 			})
 			}),
 		*(new BaseHashList<IngredientType, int>{})
@@ -1614,89 +1734,6 @@ void InitAllRecipes()
 	TypeRecipeMap.Insert(MonsterCurry);
 }
 
-BaseHashList<int, Ingredient> ingredientMapID;
-
-void InitIngredientMap()
-{
-	for (int i = 0;i < unitList.size();i++)
-	{
-		ingredientMap.InsertByKey(unitList[i].GetName(), unitList[i]);
-		ingredientMapID.InsertByKey(unitList[i].GetID(), unitList[i]);
-	}
-}
-
-int GetEffectLevel(int level, EffectType type)
-{
-	switch (type)
-	{
-	case EffectType::None:
-		return 0;
-		break;
-	case EffectType::Attack:
-		if (level < 5)
-			return 1;
-		else if (level >= 5 && level < 7)
-			return 2;
-		else
-			return 3;
-		break;
-	case EffectType::Defence:
-		if (level < 5)
-			return 1;
-		else if (level >= 5 && level < 7)
-			return 2;
-		else
-			return 3;
-		break;
-	case EffectType::Speed:
-		if (level < 5)
-			return 1;
-		else if (level >= 5 && level < 7)
-			return 2;
-		else
-			return 3;
-		break;
-	case EffectType::Health:
-		return 0;
-		break;
-	case EffectType::Sneaky:
-		if (level < 6)
-			return 1;
-		else if (level >= 6 && level < 9)
-			return 2;
-		else
-			return 3;
-		break;
-	case EffectType::WarmDef:
-		if (level < 6)
-			return 1;
-		else
-			return 2;
-		break;
-	case EffectType::ColdDef:
-		if (level < 6)
-			return 1;
-		else
-			return 2;
-		break;
-	case EffectType::FireDef:
-		if (level < 7)
-			return 1;
-		else
-			return 2;
-		break;
-	case EffectType::ParalysisDef:
-		if (level < 4)
-			return 1;
-		else if (level >= 4 && level < 6)
-			return 2;
-		else
-			return 3;
-		break;
-	default:
-		break;
-	}
-}
 
 
 void DisplayDisk(const Disk& disk)
@@ -1706,44 +1743,6 @@ void DisplayDisk(const Disk& disk)
 	cout << "效果等级:" << disk.level << endl;
 	cout << "持续时间:" << disk.duration << endl;
 }
-
-Disk GetFinalDisk(const List<Ingredient>& foods, string name)
-{
-	Disk disk=Disk();
-	int levelNums=0;
-	bool typeContract = false;
-	for (int i = 0;i < foods.size();i++)
-	{
-		disk.HealValue += foods[i].GetCookHealValue();
-		disk.duration += foods[i].GetDuration();
-		if (!typeContract)
-		{
-			if (disk.type == EffectType::None)
-			{
-				disk.type = foods[i].GetCookedEffectType();
-			}
-			else
-			{
-				if (disk.type == foods[i].GetCookedEffectType())
-				{
-					typeContract = true;
-					disk.type == EffectType::None;
-				}
-			}
-		}
-		levelNums += foods[i].GetEffect().level;
-	}
-	string* firstName = EffectNameInDisk[disk.type];
-	if(firstName!=nullptr)
-	disk.name = *firstName + name;
-	else
-	{
-	disk.name = *firstName + name;
-	}
-	disk.level = GetEffectLevel(levelNums, disk.type);
-	return disk;
-}
-
 
 void InitAllUnits()
 {
