@@ -9,11 +9,11 @@ int GetTypeNum(const List<Ingredient>& foods)
 {
 	List<IngredientType> types;
 	types.push_back(foods[0].GetType());
-	for (int i = 1;i < foods.size();i++)
+	for (int i = 1; i < foods.size(); i++)
 	{
 		IngredientType chec = foods[i].GetType();
 		bool same = false;
-		for (int j = 0;j < types.size();j++)
+		for (int j = 0; j < types.size(); j++)
 		{
 			if (chec == types[j])
 			{
@@ -25,7 +25,7 @@ int GetTypeNum(const List<Ingredient>& foods)
 			types.push_back(chec);
 	}
 	int num = 0;
-	for (int i = 0;i < types.size();i++)
+	for (int i = 0; i < types.size(); i++)
 	{
 		num += static_cast<int>(types[i]) * 5 + 3;
 	}
@@ -52,7 +52,7 @@ void Cook()
 			{
 				DisplayFoods(foods);
 				cout << "请选择要添加的食材" << endl;
-				for (int i = 0;i < bag.size();i++)
+				for (int i = 0; i < bag.size(); i++)
 				{
 					cout << i + 1 << ". " << bag[i].GetName() << endl;
 				}
@@ -75,7 +75,7 @@ void Cook()
 		}
 		else if (order == 3)
 		{
-			if(foods.size()==0)
+			if (foods.size() == 0)
 			{
 				cout << "食材锅为空" << endl;
 				continue;
@@ -85,7 +85,7 @@ void Cook()
 			List<Ingredient>foodList = StackToList<Ingredient>(foods);//把栈转换成链表，方便后续操作
 			if (rightRecipes != nullptr)
 			{
-				for (int i = 0;i < rightRecipes->size();i++)
+				for (int i = 0; i < rightRecipes->size(); i++)
 				{
 					cout << "IDFind:" << (*rightRecipes)[i].GetName() << endl;
 					if ((*rightRecipes)[i].Rule(foodList))
@@ -109,7 +109,7 @@ void Cook()
 				}
 				else
 				{
-					for (int i = 0;i < rightRecipes->size();i++)
+					for (int i = 0; i < rightRecipes->size(); i++)
 					{
 						cout << "TypeFind:" << (*rightRecipes)[i].GetName() << endl;
 						if ((*rightRecipes)[i].Rule(foodList))
@@ -146,7 +146,7 @@ void DisplayFoods(Stack<Ingredient> foods)
 		cout << "空" << endl;
 	else
 	{
-		for (int i = 0;i < foods.size();i++)
+		for (int i = 0; i < foods.size(); i++)
 		{
 			cout << foods[i].GetName() << ' ';
 		}
@@ -156,7 +156,7 @@ void DisplayFoods(Stack<Ingredient> foods)
 void AddUnit()
 {
 	cout << "请选择要添加的物品" << endl;
-	for (int i = 0;i < unitList.size();i++)
+	for (int i = 0; i < unitList.size(); i++)
 	{
 		cout << i + 1 << ":" << unitList[i].GetName() << endl;
 	}
@@ -182,31 +182,58 @@ void AddUnit()
 	bag.AddUnit(unitList[order - 1], num);
 	bag.Display();
 }
-void DisplayDisks(const List<Disk>& disks)
+void DisplayDisks(List<Disk>& disks)
 {
-	cout << "====菜肴====" << endl;
-	for(int i=0;i<disks.size();i++)
+	cout << "====料理====" << endl;
+	for (int i = 0; i < disks.size(); i++)
 	{
 		cout << i + 1 << '.' << disks[i].name << endl;
 	}
-	while(true)
+	while (true)
 	{
-	cout << "请选择操作" << endl;
-	cout << "0.结束" << endl;
-	cout << "1.展示详细属性" << endl;
-	int order;
-	cin >> order;
-	if (order == 0)
-		break;
-	else if(order==1)
-	{
-		cout << "请选择要展示的菜肴" << endl;
+		cout << "请选择操作" << endl;
+		cout << "0.结束" << endl;
+		cout << "1.展示详细属性" << endl;
+		cout << "2.排序" << endl;
+		int order;
 		cin >> order;
-		if(order>0&&order<=disks.size())
+		if (order == 0)
+			break;
+		else if (order == 1)
 		{
-			DisplayDisk(disks[order-1]);
+			cout << "请选择要展示的料理" << endl;
+			cin >> order;
+			if (order > 0 && order <= disks.size())
+			{
+				DisplayDisk(disks[order - 1]);
+			}
 		}
-	}
+		else if (order == 2)
+		{
+			cout << "选择排序方式" << endl;
+			cout << "1.按照持续时间排序" << endl;
+			cout << "2.按照buff类型排序" << endl;
+			cout << "3.按照buff等级排序" << endl;
+			cout << "4.按照心心回复量排序" << endl;
+			cin >> order;
+			switch (order)
+			{
+			case 1:
+				disks.SetHead(MergeSortByTime(disks.GetHead()));
+				break;
+			case 2:
+				disks.SetHead(MergeSortByDishType(disks));
+				break;
+			case 3:
+				disks.SetHead(MergeSortDishByBuffLevel(disks));
+				break;
+			case 4:
+				disks.SetHead(MergeSortByHeal(disks));
+			default:
+				break;
+			}
+			break;
+		}
 	}
 }
 int main()
@@ -221,7 +248,7 @@ int main()
 		cout << "1. 查看食材背包" << endl;
 		cout << "2. 添加食材" << endl;
 		cout << "3. 开始烹饪" << endl;
-		cout << "4. 查看菜肴背包" << endl;
+		cout << "4. 查看料理背包" << endl;
 		cin >> order;
 		if (order == 1)
 			bag.Display();

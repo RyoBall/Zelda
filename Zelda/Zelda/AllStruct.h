@@ -13,7 +13,7 @@ struct ListNode //节点
 	{
 		next = nullptr;
 	}
-	ListNode<T>() { 
+	ListNode<T>() {
 		next = nullptr;
 	}
 };
@@ -29,7 +29,7 @@ public:
 			throw std::out_of_range("Index out of bounds");
 		}
 		ListNode<T>* tmp = head;
-		for (int i = 0;i < index;i++)
+		for (int i = 0; i < index; i++)
 			tmp = tmp->next;
 		return tmp->data;
 	}
@@ -45,7 +45,7 @@ public:
 	{
 		length++;
 		ListNode<T>* node = new ListNode<T>(data);
-		if(head==nullptr)
+		if (head == nullptr)
 		{
 			head = node;
 		}
@@ -104,31 +104,31 @@ class List
 public:
 	T& operator[](int index)
 	{
-		if (index > length - 1||index<0)
+		if (index > length - 1 || index < 0)
 		{
 			throw std::out_of_range("Index out of bounds");
 		}
 		ListNode<T>* tmp = head;
 		if (index == length - 1)
 			return last->data;
-		for (int i = 0;i < index;i++)
+		for (int i = 0; i < index; i++)
 			tmp = tmp->next;
 		return tmp->data;
 	}
 	const T& operator[](int index)const
 	{
-		if (index > length - 1||index<0)
+		if (index > length - 1 || index < 0)
 		{
 			throw std::out_of_range("Index out of bounds");
 		}
 		ListNode<T>* tmp = head;
 		if (index == length - 1)
 			return last->data;
-		for (int i = 0;i < index;i++)
+		for (int i = 0; i < index; i++)
 			tmp = tmp->next;
 		return tmp->data;
 	}
-	void Insert(int pos,T data)
+	void Insert(int pos, T data)
 	{
 		if (pos > length + 1 || pos < 1)
 		{
@@ -140,18 +140,18 @@ public:
 		{
 			length++;
 			ListNode<T>* node = new ListNode<T>(data);
-			if(length==1)
+			if (length == 1)
 			{
 				head = last = node;
 			}
-			if(pos==1)
+			if (pos == 1)
 			{
 				node->next = head;
 				head = node;
 				return;
 			}
 			ListNode<T>* tmp = head;
-			for(int i=1;i<pos-1;i++)
+			for (int i = 1; i < pos - 1; i++)
 			{
 				tmp = tmp->next;
 			}
@@ -173,16 +173,16 @@ public:
 	}
 	void Delete(int pos)//pos从1开始数
 	{
-		if (pos > length + 1 || pos < 1||length==0)
+		if (pos > length + 1 || pos < 1 || length == 0)
 		{
 			return;
 		}
-		else if(pos==length+1)
+		else if (pos == length + 1)
 		{
 			length--;
 			delete last;
 			ListNode<T>* tmp = head;
-			for (int i = 1;i < length;i++)
+			for (int i = 1; i < length; i++)
 				tmp = tmp->next;
 			last = tmp;
 		}
@@ -190,22 +190,22 @@ public:
 		{
 			length--;
 			ListNode<T>* tmp = head;
-			for (int i = 1;i < pos - 1;i++)
+			for (int i = 1; i < pos - 1; i++)
 			{
 				tmp = tmp->next;
 			}
-			if(tmp->next!=nullptr)
-			tmp -> next = tmp->next->next;
+			if (tmp->next != nullptr)
+				tmp->next = tmp->next->next;
 			else
 			{
 				tmp->next = nullptr;
 			}
 		}
 	}
-	List<T>() { length = 0 ;head = last = nullptr; }
+	List<T>() { length = 0; head = last = nullptr; }
 	List<T>(std::initializer_list<T> datas)
 	{
-		length = 0;head = last = nullptr;
+		length = 0; head = last = nullptr;
 		for (const auto& item : datas) {
 			push_back(item);
 		}
@@ -214,16 +214,31 @@ public:
 	{
 		return head;
 	}
-	int size()const {return length;}
+	void SetHead(ListNode<T>* newHead)
+	{
+		head = newHead;
+		last = nullptr;
+		ListNode<T>* tmp = head;
+		while (tmp)
+		{
+			last = tmp;
+			tmp = tmp->next;
+		}
+	}
+	const ListNode<T>* GetHead()const
+	{
+		return head;
+	}
+	int size()const { return length; }
 protected:
 	int length;
 	ListNode<T>* head;
 	ListNode<T>* last;
 };
 
-//目前思路，需要一个map，然后把菜肴的数组放进map里
+//目前思路，需要一个map，然后把料理的数组放进map里
 
-template<typename K,typename T>
+template<typename K, typename T>
 class BaseHashList
 {
 public:
@@ -232,7 +247,7 @@ public:
 		T data;
 		int key;
 		HashData() : data(T()), key(0) {}
-		HashData(int key, T data,bool in) :data(data), key(key) {}
+		HashData(int key, T data, bool in) :data(data), key(key) {}
 		HashData(K key, T data) :data(data), key(BaseHashList<K, T>::HashFunc(key)) {}
 	};
 	BaseHashList(std::initializer_list<std::pair<K, T>> datas)
@@ -257,8 +272,8 @@ public:
 	T* operator[](K key)
 	{
 		int id = HashFunc(key);
-		int order = id% 30;
-		for (int i = 0;i < Node[order].size();i++)
+		int order = id % 30;
+		for (int i = 0; i < Node[order].size(); i++)
 		{
 			if (Node[order][i].key == id)
 				return &(Node[order][i].data);
@@ -266,16 +281,16 @@ public:
 		return nullptr;
 	}
 protected:
-	bool Insert(int id,const T& data)
+	bool Insert(int id, const T& data)
 	{
 		int order = id % mapSize;
 		if (Node[order].size() == 0)
 		{
-			Node[order].push_back(HashData(id, data,false));
+			Node[order].push_back(HashData(id, data, false));
 		}
 		else
 		{
-			for (int i = 0;i < Node[order].size();i++)
+			for (int i = 0; i < Node[order].size(); i++)
 			{
 				if (Node[order][i].key == id)
 				{
@@ -283,18 +298,18 @@ protected:
 					return false;
 				}
 			}
-			Node[order].push_back(HashData(id, data,false));
+			Node[order].push_back(HashData(id, data, false));
 		}
 		return true;
 	}
 	static int HashFunc(K key)
 	{
-		int id=std::hash<K>{}(key);
+		int id = std::hash<K>{}(key);
 		if (id < 0)
 			id = -id;
 		return id;
 	}
-	const int mapSize=30;
+	const int mapSize = 30;
 	List<HashData>* Node;
 };
 //简单实现一个类哈希表，哈希函数不太实用，甚至由于ID数量可能不太够导致只是一个数组而已
@@ -304,7 +319,7 @@ List<T> StackToList(Stack<T> stack) {
 	List<T> list;
 	T food;
 	int size = stack.size();
-	for (int i = 0;i < size;i++)
+	for (int i = 0; i < size; i++)
 	{
 		stack.Pop(food);
 		list.push_back(food);
