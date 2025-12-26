@@ -1328,6 +1328,7 @@ void InitAllRecipes()
 			*(new List<int>{
 				ingredientMap["大剑螃蟹"]->GetID(),
 				ingredientMap["铠甲螃蟹"]->GetID(),
+				ingredientMap["潜行田螺"]->GetID(),
 				ingredientMap["生命海螺"]->GetID()
 			})
 			}),
@@ -1337,6 +1338,7 @@ void InitAllRecipes()
 			*(new BaseHashList<int, int>{
 				std::make_pair(ingredientMap["大剑螃蟹"]->GetID(), 0),
 				std::make_pair(ingredientMap["铠甲螃蟹"]->GetID(), 0),
+				std::make_pair(ingredientMap["潜行田螺"]->GetID(), 0),
 				std::make_pair(ingredientMap["生命海螺"]->GetID(), 0)
 			})
 			}),
@@ -2441,9 +2443,9 @@ void InitAllUnits()
 	unitList.push_back(Ingredient("冷静蜥蜴", 58, 0, 60, IngredientType::Insect, "能提供抗热效果的蜥蜴", Effect(EffectType::WarmDef, 1)));
 	unitList.push_back(Ingredient("暖暖蜥蜴", 59, 0, 60, IngredientType::Insect, "能提供抗寒效果的蜥蜴", Effect(EffectType::ColdDef, 1)));
 	unitList.push_back(Ingredient("酥麻蜥蜴", 60, 0, 60, IngredientType::Insect, "能提供电击防护的蜥蜴", Effect(EffectType::ParalysisDef, 1)));
-	unitList.push_back(Ingredient("潜行田螺", 61, 0, 60, IngredientType::Insect, "能让行动更安静的田螺", Effect(EffectType::Sneaky, 1)));
-	unitList.push_back(Ingredient("大剑螃蟹", 62, 1, 30, IngredientType::Insect, "能提升攻击力的螃蟹", Effect(EffectType::Attack, 1)));
-	unitList.push_back(Ingredient("铠甲螃蟹", 63, 1, 30, IngredientType::Insect, "能提升防御力的螃蟹", Effect(EffectType::Defence, 1)));
-	unitList.push_back(Ingredient("速速青蛙", 64, 0, 60, IngredientType::Insect, "能让移动更快的青蛙", Effect(EffectType::Speed, 1)));
+	unitList.push_back(Ingredient("潜行田螺", 61, 0, 60, IngredientType::Fish, "能让行动更安静的田螺", Effect(EffectType::Sneaky, 1)));
+	unitList.push_back(Ingredient("大剑螃蟹", 62, 1, 30, IngredientType::Fish, "能提升攻击力的螃蟹", Effect(EffectType::Attack, 1)));
+	unitList.push_back(Ingredient("铠甲螃蟹", 63, 1, 30, IngredientType::Fish, "能提升防御力的螃蟹", Effect(EffectType::Defence, 1)));
+	unitList.push_back(Ingredient("速速青蛙", 64, 0, 60, IngredientType::Fish, "能让移动更快的青蛙", Effect(EffectType::Speed, 1)));
 	InitIngredientMap();
 }

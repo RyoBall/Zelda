@@ -37,6 +37,7 @@ void Cook()
 	Stack<Ingredient> foods;
 	while (true)
 	{
+		name = "";
 		cout << "===请选择操作===" << endl;
 		cout << "1.添加食材" << endl;
 		cout << "2.移除食材" << endl;
@@ -126,6 +127,7 @@ void Cook()
 				if (name == "")
 				{
 					Disk disk = GetFinalDisk(foodList, "大杂烩");
+					cout << "成功制作:" << "大杂烩" << endl;
 					disks.push_back(disk);
 					foods.Clear();
 				}

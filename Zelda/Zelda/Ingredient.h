@@ -73,7 +73,6 @@ public:
 	bool Rule(const List<Ingredient>& foods)
 	{
 		int* ptr;
-		cout << "可选数量" << this->specialIngredientNeedsAlternative.size() << endl;
 		foods.size();
 		for (int i = 0; i < foods.size(); i++)
 		{
