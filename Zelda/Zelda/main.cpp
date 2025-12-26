@@ -184,55 +184,62 @@ void AddUnit()
 }
 void DisplayDisks(List<Disk>& disks)
 {
-	cout << "====料理====" << endl;
-	for (int i = 0; i < disks.size(); i++)
+	bool isSorted = true;
+	while (isSorted)
 	{
-		cout << i + 1 << '.' << disks[i].name << endl;
-	}
-	while (true)
-	{
-		cout << "请选择操作" << endl;
-		cout << "0.结束" << endl;
-		cout << "1.展示详细属性" << endl;
-		cout << "2.排序" << endl;
-		int order;
-		cin >> order;
-		if (order == 0)
-			break;
-		else if (order == 1)
+		cout << "====料理====" << endl;
+		for (int i = 0; i < disks.size(); i++)
 		{
-			cout << "请选择要展示的料理" << endl;
-			cin >> order;
-			if (order > 0 && order <= disks.size())
-			{
-				DisplayDisk(disks[order - 1]);
-			}
+			cout << i + 1 << '.' << disks[i].name << endl;
 		}
-		else if (order == 2)
+		while (true)
 		{
-			cout << "选择排序方式" << endl;
-			cout << "1.按照持续时间排序" << endl;
-			cout << "2.按照buff类型排序" << endl;
-			cout << "3.按照buff等级排序" << endl;
-			cout << "4.按照心心回复量排序" << endl;
+			cout << "请选择操作" << endl;
+			cout << "0.结束" << endl;
+			cout << "1.展示详细属性" << endl;
+			cout << "2.排序" << endl;
+			int order;
 			cin >> order;
-			switch (order)
+			if (order == 0)
 			{
-			case 1:
-				disks.SetHead(MergeSortByTime(disks.GetHead()));
-				break;
-			case 2:
-				disks.SetHead(MergeSortByDishType(disks));
-				break;
-			case 3:
-				disks.SetHead(MergeSortDishByBuffLevel(disks));
-				break;
-			case 4:
-				disks.SetHead(MergeSortByHeal(disks));
-			default:
+				isSorted = false;
 				break;
 			}
-			break;
+			else if (order == 1)
+			{
+				cout << "请选择要展示的料理" << endl;
+				cin >> order;
+				if (order > 0 && order <= disks.size())
+				{
+					DisplayDisk(disks[order - 1]);
+				}
+			}
+			else if (order == 2)
+			{
+				cout << "选择排序方式" << endl;
+				cout << "1.按照持续时间排序" << endl;
+				cout << "2.按照buff类型排序" << endl;
+				cout << "3.按照buff等级排序" << endl;
+				cout << "4.按照心心回复量排序" << endl;
+				cin >> order;
+				switch (order)
+				{
+				case 1:
+					disks.SetHead(MergeSortByTime(disks.GetHead()));
+					break;
+				case 2:
+					disks.SetHead(MergeSortByDishType(disks));
+					break;
+				case 3:
+					disks.SetHead(MergeSortDishByBuffLevel(disks));
+					break;
+				case 4:
+					disks.SetHead(MergeSortByHeal(disks));
+				default:
+					break;
+				}
+				break;
+			}
 		}
 	}
 }

@@ -7,16 +7,16 @@
       "RelativeMoniker": "D:0:0:{D8071239-7B54-47A2-B030-B2597E0D562F}|Zelda\\Zelda.vcxproj|solutionrelative:Zelda\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{D8071239-7B54-47A2-B030-B2597E0D562F}|Zelda\\Zelda.vcxproj|G:\\Zelda\\Zelda\\Zelda\\AllStruct.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D8071239-7B54-47A2-B030-B2597E0D562F}|Zelda\\Zelda.vcxproj|solutionrelative:Zelda\\AllStruct.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{D8071239-7B54-47A2-B030-B2597E0D562F}|Zelda\\Zelda.vcxproj|G:\\Zelda\\Zelda\\Zelda\\Ingredient.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{D8071239-7B54-47A2-B030-B2597E0D562F}|Zelda\\Zelda.vcxproj|solutionrelative:Zelda\\Ingredient.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D8071239-7B54-47A2-B030-B2597E0D562F}|Zelda\\Zelda.vcxproj|G:\\Zelda\\Zelda\\Zelda\\Ingredient.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{D8071239-7B54-47A2-B030-B2597E0D562F}|Zelda\\Zelda.vcxproj|solutionrelative:Zelda\\Ingredient.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D8071239-7B54-47A2-B030-B2597E0D562F}|Zelda\\Zelda.vcxproj|G:\\Zelda\\Zelda\\Zelda\\AllStruct.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{D8071239-7B54-47A2-B030-B2597E0D562F}|Zelda\\Zelda.vcxproj|solutionrelative:Zelda\\AllStruct.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,13 +30,13 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "AllStruct.h",
               "DocumentMoniker": "G:\\Zelda\\Zelda\\Zelda\\AllStruct.h",
               "RelativeDocumentMoniker": "Zelda\\AllStruct.h",
               "ToolTip": "G:\\Zelda\\Zelda\\Zelda\\AllStruct.h",
               "RelativeToolTip": "Zelda\\AllStruct.h",
-              "ViewState": "AgIAANUAAAAAAAAAAAD4v+cAAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAAD0AAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-12-16T06:54:33.623Z",
               "IsPinned": true,
@@ -48,26 +48,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Ingredient.cpp",
               "DocumentMoniker": "G:\\Zelda\\Zelda\\Zelda\\Ingredient.cpp",
               "RelativeDocumentMoniker": "Zelda\\Ingredient.cpp",
               "ToolTip": "G:\\Zelda\\Zelda\\Zelda\\Ingredient.cpp",
               "RelativeToolTip": "Zelda\\Ingredient.cpp",
-              "ViewState": "AgIAAPIIAAAAAAAAAAD4vwQJAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAMGAAAAAAAAAAAAABIGAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-12-19T02:09:41.822Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Ingredient.h",
               "DocumentMoniker": "G:\\Zelda\\Zelda\\Zelda\\Ingredient.h",
               "RelativeDocumentMoniker": "Zelda\\Ingredient.h",
               "ToolTip": "G:\\Zelda\\Zelda\\Zelda\\Ingredient.h",
               "RelativeToolTip": "Zelda\\Ingredient.h",
-              "ViewState": "AgIAAFwBAAAAAAAAAAAkwG8BAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAANYAAAAAAAAAAAAAAAoAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-12-21T10:20:03.255Z",
               "EditorCaption": ""
@@ -80,7 +80,7 @@
               "RelativeDocumentMoniker": "Zelda\\main.cpp",
               "ToolTip": "G:\\Zelda\\Zelda\\Zelda\\main.cpp",
               "RelativeToolTip": "Zelda\\main.cpp",
-              "ViewState": "AgIAAMYAAAAAAAAAAAAkwNgAAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAAPEAAAAAAAAAAAAUwAoBAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-12-16T06:43:42.704Z",
               "EditorCaption": ""

@@ -2350,7 +2350,7 @@ void InitAllUnits()
 	unitList.push_back(Ingredient("速速莲蓬", 67, 0.5, 60, IngredientType::Fruit, "能大幅提升移动速度的水果", Effect(EffectType::Speed, 2)));
 
 	// ==================== MEAT 肉类 ====================
-	unitList.push_back(Ingredient("生肉", 12, 1, 0, IngredientType::Meat, "普通动物的肉，基础食材"));
+	unitList.push_back(Ingredient("生肉", 12, 1.0, 0, IngredientType::Meat, "普通动物的肉，基础食材"));
 	unitList.push_back(Ingredient("高级生肉", 13, 1.5, 0, IngredientType::Meat, "优质动物的肉，恢复更多体力"));
 	unitList.push_back(Ingredient("顶级生肉", 14, 2, 0, IngredientType::Meat, "稀有动物的顶级肉质"));
 	unitList.push_back(Ingredient("禽肉", 15, 1, 0, IngredientType::Meat, "鸟类的肉，比兽肉更轻"));
