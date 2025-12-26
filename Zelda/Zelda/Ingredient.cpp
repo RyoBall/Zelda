@@ -85,8 +85,8 @@ bool Ingredient::operator==(const Ingredient& otherIngredient)
 BaseHashList<EffectType, std::string> EffectNameInDisk{
 	{EffectType::None, ""},
 	{EffectType::ColdDef, "冰冷"},
-	{EffectType::Attack, "大剑"},
-	{EffectType::Defence, "铠甲"},
+	{EffectType::Attack, "力量"},
+	{EffectType::Defence, "坚硬"},
 	{EffectType::Speed, "速速"},
 	{EffectType::Health, "生命"},
 	{EffectType::Sneaky, "潜行"},
@@ -104,7 +104,7 @@ void InitEffectBaseName()
 	EffectBaseName.InsertByKey(EffectType::Sneaky, "安静性提升");
 	EffectBaseName.InsertByKey(EffectType::WarmDef, "耐热防护");
 	EffectBaseName.InsertByKey(EffectType::ColdDef, "耐寒防护");
-	EffectBaseName.InsertByKey( EffectType::FireDef, "耐火防護" );
+	EffectBaseName.InsertByKey(EffectType::FireDef, "耐火防护");
 	EffectBaseName.InsertByKey(EffectType::ParalysisDef, "电麻防护");
 	EffectBaseName.InsertByKey(EffectType::None, "");
 }
@@ -147,7 +147,7 @@ BaseHashList<int, Ingredient> ingredientMapID;
 
 void InitIngredientMap()
 {
-	for (int i = 0;i < unitList.size();i++)
+	for (int i = 0; i < unitList.size(); i++)
 	{
 		ingredientMap.InsertByKey(unitList[i].GetName(), unitList[i]);
 		ingredientMapID.InsertByKey(unitList[i].GetID(), unitList[i]);
@@ -233,7 +233,7 @@ Disk GetFinalDisk(const List<Ingredient>& foods, string name)
 	int levelNums = 0;
 	bool typeContract = false;
 
-	for (int i = 0;i < foods.size();i++)
+	for (int i = 0; i < foods.size(); i++)
 	{
 		disk.HealValue += foods[i].GetCookHealValue();
 		disk.duration += foods[i].GetDuration();
@@ -284,7 +284,7 @@ void InitAllRecipes()
 	);
 	IDRecipeMap.Insert(FriedWildVegetables);
 	TypeRecipeMap.Insert(FriedWildVegetables);
-	 // 甘露炖蔬菜（蔬菜 + 精力蜂的蜂蜜）
+	// 甘露炖蔬菜（蔬菜 + 精力蜂的蜂蜜）
 	Recipe SweetStewedVegetables(
 		"甘露炖蔬菜",
 		*(new List<int>{ ingredientMap["精力蜂的蜂蜜"]->GetID() }),
@@ -1022,8 +1022,8 @@ void InitAllRecipes()
 				}),
 		*(new List<BaseHashList<int, int>>{
 			}),
-		*(new BaseHashList<IngredientType, int>{})
-	);
+			*(new BaseHashList<IngredientType, int>{})
+			);
 	IDRecipeMap.Insert(SalmonRisotto);
 
 	// 生命干煎三文鱼（生命鲈鱼 + 塔邦挞小麦 + 山羊黄油）
@@ -1036,16 +1036,16 @@ void InitAllRecipes()
 			}),
 		*(new List<List<int>>{
 			}),
-		*(new List<IngredientType>{}),
-		*(new BaseHashList<int, int>{
-			std::make_pair(ingredientMap["塔邦挞小麦"]->GetID(), 0),
-			std::make_pair(ingredientMap["山羊黄油"]->GetID(), 0),
-			std::make_pair(ingredientMap["生命三文鱼"]->GetID(), 0)
-			}),
+			*(new List<IngredientType>{}),
+			*(new BaseHashList<int, int>{
+				std::make_pair(ingredientMap["塔邦挞小麦"]->GetID(), 0),
+				std::make_pair(ingredientMap["山羊黄油"]->GetID(), 0),
+				std::make_pair(ingredientMap["生命三文鱼"]->GetID(), 0)
+				}),
 		*(new List<BaseHashList<int, int>>{
 			}),
-		*(new BaseHashList<IngredientType, int>{})
-	);
+			*(new BaseHashList<IngredientType, int>{})
+			);
 	IDRecipeMap.Insert(PanFriedSalmon);
 
 	// 贝肉杂烩（生命海螺 + 塔邦挞小麦 + 鲜奶 + 山羊黄油）
@@ -1059,17 +1059,17 @@ void InitAllRecipes()
 			}),
 		*(new List<List<int>>{
 			}),
-		*(new List<IngredientType>{}),
-		*(new BaseHashList<int, int>{
-			std::make_pair(ingredientMap["塔邦挞小麦"]->GetID(), 0),
-			std::make_pair(ingredientMap["鲜奶"]->GetID(), 0),
-			std::make_pair(ingredientMap["山羊黄油"]->GetID(), 0),
-			std::make_pair(ingredientMap["生命海螺"]->GetID(), 0)
-			}),
+			*(new List<IngredientType>{}),
+			*(new BaseHashList<int, int>{
+				std::make_pair(ingredientMap["塔邦挞小麦"]->GetID(), 0),
+				std::make_pair(ingredientMap["鲜奶"]->GetID(), 0),
+				std::make_pair(ingredientMap["山羊黄油"]->GetID(), 0),
+				std::make_pair(ingredientMap["生命海螺"]->GetID(), 0)
+				}),
 		*(new List<BaseHashList<int, int>>{
 			}),
-		*(new BaseHashList<IngredientType, int>{})
-	);
+			*(new BaseHashList<IngredientType, int>{})
+			);
 	IDRecipeMap.Insert(ClamChowder);
 
 	// 串烤海鲜（生命海螺/大剑鲈鱼/铠甲鲈鱼）
@@ -2257,6 +2257,68 @@ void InitAllRecipes()
 	TypeRecipeMap.Insert(SaltRoastedMushrooms);
 }
 
+ListNode<Disk>* Merge(ListNode<Disk>* a, ListNode<Disk>* b,
+	std::function<bool(const Disk&, const Disk&)> comp)
+{
+	if (!a) return b;
+	if (!b) return a;
+
+	if (comp(a->data, b->data)) {
+		a->next = Merge(a->next, b, comp);
+		return a;
+	}
+	else {
+		b->next = Merge(a, b->next, comp);
+		return b;
+	}
+}
+
+ListNode<Disk>* MergeSort(ListNode<Disk>* head, std::function<bool(const Disk&, const Disk&)> comp)
+{
+	if (!head || !head->next)
+		return head;
+
+	ListNode<Disk>* slow = head;
+	ListNode<Disk>* fast = head->next;
+
+	while (fast && fast->next) {
+		slow = slow->next;
+		fast = fast->next->next;
+	}
+
+	ListNode<Disk>* mid = slow->next;
+	slow->next = nullptr;
+
+	ListNode<Disk>* left = MergeSort(head, comp);
+	ListNode<Disk>* right = MergeSort(mid, comp);
+
+	return Merge(left, right, comp);
+}
+ListNode<Disk>* MergeSortByDishType(List<Disk>& dishes) 
+{
+	auto comp = [](const Disk& a, const Disk& b) {
+		return static_cast<int>(a.type) <= static_cast<int>(b.type);};
+	return MergeSort(dishes.GetHead(), comp);
+}
+ListNode<Disk>* MergeSortDishByBuffLevel(List<Disk>& dishes) {
+	auto comp = [](const Disk& a, const Disk& b) {
+		return a.level <= b.level;
+		};
+	return MergeSort(dishes.GetHead(), comp);
+}
+ListNode<Disk>* MergeSortByHeal(List<Disk>& dishes)
+{
+	auto comp = [](const Disk& a, const Disk& b) {
+		return a.HealValue <= b.HealValue;
+		};
+	return MergeSort(dishes.GetHead(), comp);
+}
+ListNode<Disk>* MergeSortByTime(ListNode<Disk>* head) {
+	auto comp = [](const Disk& a, const Disk& b) {
+		return a.duration <= b.duration;
+		};
+	return MergeSort(head, comp);
+}
 std::string GetEffectTypeName(EffectType type)
 {
 	std::string* name = EffectBaseName[type];
@@ -2280,7 +2342,7 @@ void InitAllUnits()
 	unitList.push_back(Ingredient("苹果", 1, 0.5, 0, IngredientType::Fruit, "海拉鲁最常见的果实，可以恢复少量体力"));
 	unitList.push_back(Ingredient("椰子", 2, 0.5, 0, IngredientType::Fruit, "热带海岸的果实，坚硬外壳内有清甜汁液"));
 	unitList.push_back(Ingredient("草莓", 3, 0.5, 0, IngredientType::Fruit, "小巧的红色果实，生长在草地和森林中"));
-	unitList.push_back(Ingredient("冰冷蜜瓜", 4, 1, 30, IngredientType::Fruit, "格鲁德地区特产，能提供抗热效果", Effect(EffectType::FireDef, 1)));
+	unitList.push_back(Ingredient("冰冷蜜瓜", 4, 1, 30, IngredientType::Fruit, "格鲁德地区特产，能提供抗热效果", Effect(EffectType::WarmDef, 1)));
 	unitList.push_back(Ingredient("暖暖草果", 5, 0.5, 30, IngredientType::Fruit, "散发温暖的红色果实，能抵御寒冷", Effect(EffectType::ColdDef, 1)));
 	unitList.push_back(Ingredient("酥麻水果", 6, 1, 30, IngredientType::Fruit, "费罗尼地区的特殊水果，提供电击防护", Effect(EffectType::ParalysisDef, 1)));
 	unitList.push_back(Ingredient("大剑香蕉", 7, 1, 30, IngredientType::Fruit, "依盖队最爱的水果，能提升攻击力", Effect(EffectType::Attack, 1)));
@@ -2288,7 +2350,7 @@ void InitAllUnits()
 	unitList.push_back(Ingredient("速速莲蓬", 67, 0.5, 60, IngredientType::Fruit, "能大幅提升移动速度的水果", Effect(EffectType::Speed, 2)));
 
 	// ==================== MEAT 肉类 ====================
-	unitList.push_back(Ingredient("生肉", 12, 1, 0, IngredientType::Meat, "普通动物的肉，基础食材"));
+	unitList.push_back(Ingredient("生肉", 12, 1.0, 0, IngredientType::Meat, "普通动物的肉，基础食材"));
 	unitList.push_back(Ingredient("高级生肉", 13, 1.5, 0, IngredientType::Meat, "优质动物的肉，恢复更多体力"));
 	unitList.push_back(Ingredient("顶级生肉", 14, 2, 0, IngredientType::Meat, "稀有动物的顶级肉质"));
 	unitList.push_back(Ingredient("禽肉", 15, 1, 0, IngredientType::Meat, "鸟类的肉，比兽肉更轻"));
@@ -2302,7 +2364,7 @@ void InitAllUnits()
 	unitList.push_back(Ingredient("海拉鲁蘑菇", 21, 1, 0, IngredientType::Mushroom, "海拉鲁最常见的蘑菇品种"));
 	unitList.push_back(Ingredient("精力蘑菇", 22, 1, 0, IngredientType::Mushroom, "能恢复少量精力的蘑菇", Effect(EffectType::Health, 1)));
 	unitList.push_back(Ingredient("铠甲蘑菇", 23, 0.5, 30, IngredientType::Mushroom, "能提升防御力的坚固蘑菇", Effect(EffectType::Defence, 1)));
-	unitList.push_back(Ingredient("冰冷蘑菇", 24, 0.5, 30, IngredientType::Mushroom, "生长在寒冷地区的抗热蘑菇", Effect(EffectType::FireDef, 1)));
+	unitList.push_back(Ingredient("冰冷蘑菇", 24, 0.5, 30, IngredientType::Mushroom, "生长在寒冷地区的抗热蘑菇", Effect(EffectType::WarmDef, 1)));
 	unitList.push_back(Ingredient("暖暖蘑菇", 25, 0.5, 30, IngredientType::Mushroom, "生长在温暖地区的抗寒蘑菇", Effect(EffectType::ColdDef, 1)));
 	unitList.push_back(Ingredient("酥麻蘑菇", 26, 0.5, 30, IngredientType::Mushroom, "能在雷雨天找到的防电蘑菇", Effect(EffectType::ParalysisDef, 1)));
 	unitList.push_back(Ingredient("潜行蘑菇", 27, 0.5, 60, IngredientType::Mushroom, "能让行动更安静的蘑菇", Effect(EffectType::Sneaky, 1)));
@@ -2324,7 +2386,7 @@ void InitAllUnits()
 
 	// ==================== GRASS 草类 ====================
 	unitList.push_back(Ingredient("海拉鲁草", 72, 1, 0, IngredientType::Vegetable, "海拉鲁常见的草，基础草药"));
-	unitList.push_back(Ingredient("冰冷香草", 73, 0, 150, IngredientType::Vegetable, "生长在寒冷地区的抗热香草", Effect(EffectType::FireDef, 1)));
+	unitList.push_back(Ingredient("冰冷香草", 73, 0, 150, IngredientType::Vegetable, "生长在寒冷地区的抗热香草", Effect(EffectType::WarmDef, 1)));
 	unitList.push_back(Ingredient("暖暖香草", 74, 0, 150, IngredientType::Vegetable, "生长在温暖地区的抗寒香草", Effect(EffectType::ColdDef, 1)));
 	unitList.push_back(Ingredient("酥麻香草", 75, 0, 150, IngredientType::Vegetable, "生长在雷雨地区的防电香草", Effect(EffectType::ParalysisDef, 1)));
 	unitList.push_back(Ingredient("速递紫罗兰", 76, 0, 60, IngredientType::Vegetable, "能大幅提升移动速度的紫罗兰", Effect(EffectType::Speed, 2)));
@@ -2340,7 +2402,7 @@ void InitAllUnits()
 	// ==================== FISH 鱼类 ====================
 	unitList.push_back(Ingredient("精力鲈鱼", 36, 1, 0, IngredientType::Fish, "能恢复精力的鱼类", Effect(EffectType::Health, 1)));
 	unitList.push_back(Ingredient("铠甲鲈鱼", 37, 1, 30, IngredientType::Fish, "能提升防御力的鱼类", Effect(EffectType::Defence, 1)));
-	unitList.push_back(Ingredient("冰冷鲈鱼", 38, 1, 30, IngredientType::Fish, "能提供抗热效果的鱼类", Effect(EffectType::FireDef, 1)));
+	unitList.push_back(Ingredient("冰冷鲈鱼", 38, 1, 30, IngredientType::Fish, "能提供抗热效果的鱼类", Effect(EffectType::WarmDef, 1)));
 	unitList.push_back(Ingredient("暖暖鲈鱼", 39, 1, 30, IngredientType::Fish, "能提供抗寒效果的鱼类", Effect(EffectType::ColdDef, 1)));
 	unitList.push_back(Ingredient("酥麻鲈鱼", 40, 1, 30, IngredientType::Fish, "能提供电击防护的鱼类", Effect(EffectType::ParalysisDef, 1)));
 	unitList.push_back(Ingredient("生命鲈鱼", 41, 4, 0, IngredientType::Fish, "能恢复大量体力的稀有鱼类"));
@@ -2376,7 +2438,7 @@ void InitAllUnits()
 
 	// 昆虫/蜥蜴
 	unitList.push_back(Ingredient("精力蚱蜢", 57, 0, 0, IngredientType::Insect, "能恢复精力的昆虫", Effect(EffectType::Health, 1)));
-	unitList.push_back(Ingredient("冷静蜥蜴", 58, 0, 60, IngredientType::Insect, "能提供抗热效果的蜥蜴", Effect(EffectType::FireDef, 1)));
+	unitList.push_back(Ingredient("冷静蜥蜴", 58, 0, 60, IngredientType::Insect, "能提供抗热效果的蜥蜴", Effect(EffectType::WarmDef, 1)));
 	unitList.push_back(Ingredient("暖暖蜥蜴", 59, 0, 60, IngredientType::Insect, "能提供抗寒效果的蜥蜴", Effect(EffectType::ColdDef, 1)));
 	unitList.push_back(Ingredient("酥麻蜥蜴", 60, 0, 60, IngredientType::Insect, "能提供电击防护的蜥蜴", Effect(EffectType::ParalysisDef, 1)));
 	unitList.push_back(Ingredient("潜行田螺", 61, 0, 60, IngredientType::Insect, "能让行动更安静的田螺", Effect(EffectType::Sneaky, 1)));
