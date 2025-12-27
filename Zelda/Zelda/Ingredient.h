@@ -72,7 +72,7 @@ class Recipe//²ËÆ×
 public:
 	bool Rule(const List<Ingredient>& foods)
 	{
-		int* ptr;
+		int* ptr;	
 		foods.size();
 		for (int i = 0; i < foods.size(); i++)
 		{
